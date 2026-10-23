@@ -18,26 +18,20 @@
     font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
     -webkit-font-smoothing:antialiased;
   }
-  .wrap{max-width:1000px; margin:0 auto; padding:16px 16px 64px}
+  .wrap{max-width:1040px; margin:0 auto; padding:16px 16px 64px}
 
   header{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:4px}
   h1{font-size:20px; margin:0; letter-spacing:-.2px}
   .upd{color:var(--mute); font-size:12px}
-  .upd button{
-    border:0; background:none; color:var(--blue); cursor:pointer;
-    font:inherit; padding:0 0 0 6px; text-decoration:underline;
-  }
+  .upd button{border:0; background:none; color:var(--blue); cursor:pointer;
+              font:inherit; padding:0 0 0 6px; text-decoration:underline}
   .tabs{margin-left:auto; display:flex; background:var(--line); border-radius:999px; padding:2px}
-  .tabs button{
-    border:0; background:none; font:inherit; font-size:13px; color:var(--mute);
-    padding:5px 14px; border-radius:999px; cursor:pointer;
-  }
+  .tabs button{border:0; background:none; font:inherit; font-size:13px; color:var(--mute);
+               padding:5px 14px; border-radius:999px; cursor:pointer}
   .tabs button.on{background:var(--card); color:var(--ink); font-weight:500}
 
-  .meter{
-    display:flex; align-items:center; gap:10px; background:var(--card);
-    border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin:12px 0 16px;
-  }
+  .meter{display:flex; align-items:center; gap:10px; background:var(--card);
+         border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin:12px 0 16px}
   .meter b{font-size:22px; line-height:1}
   .meter .bar{flex:1; height:6px; background:var(--line); border-radius:3px; overflow:hidden}
   .meter .bar i{display:block; height:100%; background:var(--green); transition:width .4s}
@@ -45,27 +39,21 @@
   .meter small{color:var(--mute); font-size:12px}
 
   .chips{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px}
-  .chip{
-    border:1px solid var(--line); background:var(--card); color:var(--ink);
-    border-radius:999px; padding:5px 12px; font-size:13px; cursor:pointer;
-    display:inline-flex; align-items:center; gap:6px;
-  }
+  .chip{border:1px solid var(--line); background:var(--card); color:var(--ink);
+        border-radius:999px; padding:5px 12px; font-size:13px; cursor:pointer;
+        display:inline-flex; align-items:center; gap:6px}
   .chip.on{background:var(--ink); color:#fff; border-color:var(--ink)}
 
-  h2{
-    font-size:12px; text-transform:uppercase; letter-spacing:.7px; color:var(--mute);
-    margin:24px 0 8px; display:flex; align-items:center; gap:8px;
-  }
+  h2{font-size:12px; text-transform:uppercase; letter-spacing:.7px; color:var(--mute);
+     margin:24px 0 8px; display:flex; align-items:center; gap:8px}
   h2 .count{background:var(--line); color:var(--mute); border-radius:999px;
             padding:1px 7px; font-size:11px; letter-spacing:0}
   h2.hot{color:var(--red)} h2.hot .count{background:#ffebe6; color:var(--red)}
   h2.wait{color:var(--amber)} h2.wait .count{background:#fff7e6; color:var(--amber)}
 
-  .card{
-    display:block; text-decoration:none; color:inherit; background:var(--card);
-    border:1px solid var(--line); border-left:3px solid var(--p0);
-    border-radius:8px; padding:10px 12px; margin-bottom:6px;
-  }
+  .card{display:block; text-decoration:none; color:inherit; background:var(--card);
+        border:1px solid var(--line); border-left:3px solid var(--p0);
+        border-radius:8px; padding:10px 12px; margin-bottom:6px}
   .card:hover{border-color:#c1c7d0}
   .card .t{font-weight:500}
   .card .m{display:flex; gap:10px; flex-wrap:wrap; margin-top:3px; font-size:12px; color:var(--mute)}
@@ -74,10 +62,8 @@
   .card .m .days{color:var(--amber); font-weight:500}
   .dot{width:7px; height:7px; border-radius:50%; display:inline-block; margin-right:5px; vertical-align:1px}
 
-  details summary{
-    cursor:pointer; font-size:12px; text-transform:uppercase; letter-spacing:.7px;
-    color:var(--mute); margin:24px 0 8px; list-style:none;
-  }
+  details summary{cursor:pointer; font-size:12px; text-transform:uppercase; letter-spacing:.7px;
+                  color:var(--mute); margin:24px 0 8px; list-style:none}
   details summary::-webkit-details-marker{display:none}
   details summary::before{content:"▸ "}
   details[open] summary::before{content:"▾ "}
@@ -86,14 +72,10 @@
   #office{display:none}
   body.office #office{display:block}
   body.office #list{display:none}
-  .stage{
-    width:100%; height:auto; display:block; background:var(--card);
-    border:1px solid var(--line); border-radius:12px;
-  }
-  .person{transition:transform 1.4s cubic-bezier(.45,.05,.3,1)}
-  .person{cursor:pointer}
-  .person .body{transition:opacity .2s}
-  .person.dim{opacity:.3}
+  .stage{width:100%; height:auto; display:block; background:var(--card);
+         border:1px solid var(--line); border-radius:12px}
+  .person{transition:transform 1.4s cubic-bezier(.45,.05,.3,1); cursor:pointer}
+  .person.dim{opacity:.28}
   .leg{transform-origin:center top}
   .person.walk .leg-l{animation:step .5s linear infinite}
   .person.walk .leg-r{animation:step .5s linear infinite .25s}
@@ -101,11 +83,9 @@
   @keyframes step{0%{transform:rotate(16deg)}50%{transform:rotate(-16deg)}100%{transform:rotate(16deg)}}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.4px)}}
   .paper{cursor:pointer}
-  .paper:hover{filter:brightness(.94)}
-  .legend{
-    display:flex; gap:16px; flex-wrap:wrap; color:var(--mute);
-    font-size:12px; margin-top:10px;
-  }
+  .paper:hover{filter:brightness(.95)}
+  .legend{display:flex; gap:14px; flex-wrap:wrap; color:var(--mute); font-size:12px; margin-top:10px}
+  .legend i{width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:5px}
 
   .empty{color:var(--mute); padding:28px 0; text-align:center}
   .err{background:#ffebe6; border:1px solid #ffbdad; color:var(--red);
@@ -136,15 +116,11 @@
   <div id="list"><div class="empty">загружаю…</div></div>
 
   <div id="office">
-    <svg class="stage" viewBox="0 0 1000 640" id="svg">
+    <svg class="stage" viewBox="0 0 1000 596" id="svg">
       <g id="zoneLayer"></g>
       <g id="peopleLayer"></g>
     </svg>
-    <div class="legend">
-      <span>Человек стоит у проекта, где его ближайшая задача</span>
-      <span>Красный кружок над головой — есть просрочка</span>
-      <span>Наведи на бумагу — название задачи, клик — Trello</span>
-    </div>
+    <div class="legend" id="legend"></div>
   </div>
 </div>
 
@@ -162,19 +138,21 @@ const HEX = { 'Призвание':'#6554c0', 'Cosmica':'#e5478a', 'Racing Stars
 const colorOf = p => (COLORS.find(c => c[0].test(p)) || [null, 'var(--p0)'])[1];
 const hexOf = p => HEX[p] || '#5e6c84';
 
+/* цвет одежды у каждого, чтобы узнавать без подписи */
+const SHIRT = ['#4c6ef5','#12b886','#f59f00','#e8590c','#7950f2','#1098ad'];
+
 const DAYS = ['вс','пн','вт','ср','чт','пт','сб'];
 const MONTHS = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
 
-/* планировка офиса, координаты в системе 1000×640 */
-const ZONES = [
-  { key:'Призвание',    x: 30, y: 54, w:390, h:240 },
-  { key:'Cosmica',      x:440, y: 54, w:390, h:240 },
-  { key:'Racing Stars', x: 30, y:320, w:390, h:240 },
-  { key:'Общее',        x:440, y:320, w:390, h:240 }
-];
-const WAIT = { x:850, y:54, w:120, h:506 };
-const COOLER = { x:120, y:600 };
-const OVERLOAD = 6;
+/* планировка, система координат 1000×596 */
+const WALL   = { x: 30, y: 14,  w:760, h: 86 };
+const URGENT = { x: 30, y:110,  w:600, h:120 };
+const LOUNGE = { x:646, y:110,  w:144, h:120 };
+const DESKS  = { x: 30, y:244,  w:760, h:190 };
+const POOL   = { x: 30, y:446,  w:526, h:134 };
+const AI     = { x:572, y:446,  w:218, h:134 };
+const WAIT   = { x:806, y: 14,  w:164, h:566 };
+const ROWS = 4;           /* задач на столе одновременно */
 
 let DATA = null, fPerson = null, fProject = null;
 let view = localStorage.getItem('axium-view') || 'list';
@@ -189,16 +167,12 @@ async function load(fresh) {
     if (d.error) return fail('Доступ не подтверждён. Проверь ключ в адресе.');
     DATA = d;
     render();
-  } catch (e) {
-    fail('Не удалось получить данные: ' + e.message);
-  }
+  } catch (e) { fail('Не удалось получить данные: ' + e.message); }
 }
-
 function fail(msg) {
   document.getElementById('upd').textContent = '';
   document.getElementById('list').innerHTML = '<div class="err">' + esc(msg) + '</div>';
 }
-
 function setView(v) {
   view = v;
   localStorage.setItem('axium-view', v);
@@ -211,7 +185,6 @@ function setView(v) {
 /* ── общая отрисовка ───────────────────────────────────────── */
 function render() {
   const d = DATA;
-
   document.getElementById('upd').innerHTML =
     'обновлено ' + esc(d.updated) + '<button onclick="load(1)">обновить</button>';
 
@@ -219,12 +192,10 @@ function render() {
   m.hidden = false;
   m.classList.toggle('over', d.weekCount > d.weekLimit);
   document.getElementById('wc').textContent = d.weekCount;
-  document.getElementById('wbar').style.width =
-    Math.min(100, d.weekCount / d.weekLimit * 100) + '%';
-  document.getElementById('wtext').textContent =
-    d.weekCount > d.weekLimit
-      ? 'задач на неделе — перебор, предел ' + d.weekLimit
-      : 'задач на этой неделе из ' + d.weekLimit;
+  document.getElementById('wbar').style.width = Math.min(100, d.weekCount / d.weekLimit * 100) + '%';
+  document.getElementById('wtext').textContent = d.weekCount > d.weekLimit
+    ? 'задач на неделе — перебор, предел ' + d.weekLimit
+    : 'задач на этой неделе из ' + d.weekLimit;
 
   chips('people', [...new Set(d.items.flatMap(x => x.owners || []))].sort(),
         fPerson, v => { fPerson = v; render(); });
@@ -235,7 +206,7 @@ function render() {
     (!fPerson || (x.owners || []).includes(fPerson)) &&
     (!fProject || x.project === fProject));
 
-  if (view === 'office') renderOffice(items, d.items);
+  if (view === 'office') renderOffice(items, d);
   else renderList(items);
 }
 
@@ -257,21 +228,17 @@ function chips(id, vals, active, cb, color) {
 /* ── режим: список ─────────────────────────────────────────── */
 function renderList(items) {
   const out = [];
-  const late = items.filter(x => x.status === 'overdue')
-                    .sort((a, b) => (a.due || '').localeCompare(b.due || ''));
+  const late = items.filter(x => x.status === 'overdue').sort(byDue);
   const wait = items.filter(x => x.status === 'waiting')
                     .sort((a, b) => (b.waitingDays || 0) - (a.waitingDays || 0));
   const week = items.filter(x => x.status === 'week');
   const none = items.filter(x => x.status === 'noDate');
-  const next = items.filter(x => x.status === 'later')
-                    .sort((a, b) => (a.due || '').localeCompare(b.due || ''));
+  const next = items.filter(x => x.status === 'later').sort(byDue);
 
   if (late.length) out.push(sec('Просрочено', late, 'hot'));
-
   const byDay = {};
   week.forEach(x => (byDay[x.dueDay] = byDay[x.dueDay] || []).push(x));
   Object.keys(byDay).sort().forEach(day => out.push(sec(dayLabel(day), byDay[day])));
-
   if (wait.length) out.push(sec('Ждём клиента', wait, 'wait'));
   if (none.length) out.push(sec('Без срока', none));
   if (next.length) out.push(fold('Дальше', next));
@@ -279,7 +246,7 @@ function renderList(items) {
   document.getElementById('list').innerHTML =
     out.join('') || '<div class="empty">Ничего не найдено</div>';
 }
-
+const byDue = (a, b) => (a.due || '9').localeCompare(b.due || '9');
 function sec(title, arr, cls) {
   return '<h2 class="' + (cls || '') + '">' + esc(title) +
          '<span class="count">' + arr.length + '</span></h2>' + arr.map(card).join('');
@@ -291,144 +258,249 @@ function fold(title, arr) {
 function card(x) {
   const meta = [];
   if (x.owner) meta.push('<span class="who">' + esc(x.owner) + '</span>');
-  meta.push('<span><i class="dot" style="background:' + colorOf(x.project) + '"></i>' +
-            esc(x.project) + '</span>');
-  if (x.status === 'overdue')
-    meta.push('<span class="late">просрочено ' + esc(shortDate(x.due)) + '</span>');
+  meta.push('<span><i class="dot" style="background:' + colorOf(x.project) + '"></i>' + esc(x.project) + '</span>');
+  if (x.status === 'overdue') meta.push('<span class="late">просрочено ' + esc(shortDate(x.due)) + '</span>');
   else if (x.status === 'waiting' && x.waitingDays != null)
     meta.push('<span class="days">без движения ' + x.waitingDays + ' ' + plural(x.waitingDays) + '</span>');
   else if (x.due) meta.push('<span>' + esc(shortDate(x.due)) + '</span>');
-
   return '<a class="card" style="border-left-color:' + colorOf(x.project) + '" href="' +
          esc(x.url) + '" target="_blank" rel="noopener"><div class="t">' + esc(x.title) +
          '</div><div class="m">' + meta.join('') + '</div></a>';
 }
 
 /* ── режим: офис ───────────────────────────────────────────── */
-function renderOffice(items, all) {
+function renderOffice(items, data) {
   const zl = document.getElementById('zoneLayer');
   const pl = document.getElementById('peopleLayer');
 
-  const zoneOf = p => ZONES.find(z => z.key === p) ? p : 'Общее';
-  const active = items.filter(x => x.status !== 'waiting');
   const waiting = items.filter(x => x.status === 'waiting');
+  const live    = items.filter(x => x.status !== 'waiting');
+  const aiTasks = live.filter(x => x.ai);
+  const rest    = live.filter(x => !x.ai);
 
-  let svg = '<rect x="0" y="0" width="1000" height="640" rx="12" fill="#fbfbfc"/>';
+  /* на доску срочного: помеченные, просроченные и ничьи */
+  const hot = rest.filter(x => x.urgent || x.status === 'overdue' || !(x.owners || []).length)
+                  .sort((a, b) => (b.urgent ? 1 : 0) - (a.urgent ? 1 : 0) ||
+                                  rank(a) - rank(b) || byDue(a, b));
+  const hotIds = new Set(hot.map(x => x.id));
+  const desked = rest.filter(x => !hotIds.has(x.id));
+  const pool   = rest.filter(x => !hotIds.has(x.id) && (x.status === 'noDate' || x.status === 'later'));
+  const poolIds = new Set(pool.map(x => x.id));
 
-  /* зоны */
-  ZONES.forEach(z => {
-    const mine = active.filter(x => zoneOf(x.project) === z.key);
-    const late = mine.filter(x => x.status === 'overdue').length;
-    const over = mine.length > OVERLOAD;
-    const c = hexOf(z.key);
+  const names = [...new Set(data.items.flatMap(x => x.owners || []))].sort();
+  let svg = '<rect x="0" y="0" width="1000" height="596" rx="12" fill="#fbfbfc"/>';
 
-    svg += '<rect x="' + z.x + '" y="' + z.y + '" width="' + z.w + '" height="' + z.h +
-           '" rx="14" fill="' + c + '" fill-opacity="0.05" stroke="' + (over ? '#de350b' : c) +
-           '" stroke-opacity="' + (over ? 0.9 : 0.25) + '"' + (over ? ' stroke-dasharray="6 4"' : '') + '/>';
-    svg += '<circle cx="' + (z.x + 20) + '" cy="' + (z.y + 24) + '" r="5" fill="' + c + '"/>';
-    svg += '<text x="' + (z.x + 34) + '" y="' + (z.y + 29) + '" font-size="15" font-weight="600" fill="#172b4d">' +
-           esc(z.key) + '</text>';
-    svg += '<text x="' + (z.x + z.w - 16) + '" y="' + (z.y + 29) + '" font-size="13" text-anchor="end" fill="' +
-           (over ? '#de350b' : '#6b778c') + '">' + mine.length +
-           (late ? ' · ' + late + ' просроч.' : '') + '</text>';
-
-    /* стол */
-    const dx = z.x + 20, dy = z.y + 40, dw = z.w - 40, dh = z.h - 94;
-    svg += '<rect x="' + dx + '" y="' + dy + '" width="' + dw + '" height="' + dh +
-           '" rx="8" fill="#ffffff" stroke="#e4e6ea"/>';
-
-    /* бумаги на столе: просроченные сверху, дальше по сроку */
-    const rows = Math.max(1, Math.floor((dh - 10) / 22));
-    const sorted = mine.slice().sort((a, b) =>
-      rank(a) - rank(b) || (a.due || '9').localeCompare(b.due || '9'));
-
-    sorted.slice(0, rows).forEach((x, i) => {
-      const py = dy + 7 + i * 22;
-      const fill = x.status === 'overdue' ? '#ffd8cd'
-                 : x.status === 'noDate' ? '#f1f2f4' : '#eaf0ff';
-      const stroke = x.status === 'overdue' ? '#de350b' : '#c4d0e8';
-      const ink = x.status === 'overdue' ? '#8b1a00' : '#2a3b57';
-      const when = x.status === 'overdue' ? 'просроч.'
-                 : x.status === 'noDate' ? 'без срока'
-                 : x.due ? shortDate(x.due).replace(/,.*$/, '') : '';
-      const tw = dw - 76;
-      svg += '<a href="' + esc(x.url) + '" target="_blank" rel="noopener">' +
-             '<rect class="paper" x="' + (dx + 8) + '" y="' + py + '" width="' + (dw - 16) +
-             '" height="18" rx="4" fill="' + fill + '" stroke="' + stroke + '" stroke-opacity="0.55"><title>' +
-             esc((x.owner ? x.owner + ' · ' : '') + x.title + (x.due ? ' · ' + shortDate(x.due) : '')) +
-             '</title></rect>' +
-             '<text x="' + (dx + 16) + '" y="' + (py + 13) + '" font-size="11" fill="' + ink +
-             '" pointer-events="none">' + esc(clip(x.title, tw)) + '</text>' +
-             '<text x="' + (dx + dw - 14) + '" y="' + (py + 13) + '" font-size="10" text-anchor="end" fill="' +
-             (x.status === 'overdue' ? '#de350b' : '#8b95a7') + '" pointer-events="none">' +
-             esc(when) + '</text></a>';
+  /* ── стена ── */
+  svg += panel(WALL, '#f7f5f2', '#e3ded6');
+  svg += label(WALL.x + 16, WALL.y + 22, 'Стена: референсы и ссылки', '#7a6a55');
+  const links = data.links || [];
+  if (!links.length) {
+    svg += '<text x="' + (WALL.x + 16) + '" y="' + (WALL.y + 52) + '" font-size="11.5" fill="#a89a85">' +
+           'пусто — заведи в Trello список «📎 Ссылки», карточки оттуда повесим сюда</text>';
+  } else {
+    links.slice(0, 5).forEach((l, i) => {
+      const fx = WALL.x + 16 + i * 148;
+      svg += '<a href="' + esc(l.url) + '" target="_blank" rel="noopener">' +
+             '<rect class="paper" x="' + fx + '" y="' + (WALL.y + 32) + '" width="136" height="42" rx="5" ' +
+             'fill="#ffffff" stroke="#ddd5c8"><title>' + esc(l.title) + '</title></rect>' +
+             '<text x="' + (fx + 10) + '" y="' + (WALL.y + 50) + '" font-size="11" fill="#5c4f3d" ' +
+             'pointer-events="none">' + esc(clip(l.title, 116)) + '</text>' +
+             '<text x="' + (fx + 10) + '" y="' + (WALL.y + 65) + '" font-size="9.5" fill="#a89a85" ' +
+             'pointer-events="none">' + esc(clip(l.note || 'ссылка', 116)) + '</text></a>';
     });
-    if (mine.length > rows)
-      svg += '<text x="' + (dx + dw - 14) + '" y="' + (dy + dh - 6) +
-             '" font-size="11" text-anchor="end" fill="#6b778c">ещё ' + (mine.length - rows) + '</text>';
+  }
+
+  /* ── доска срочного ── */
+  svg += panel(URGENT, '#fff6f4', '#ffbdad');
+  svg += label(URGENT.x + 16, URGENT.y + 24, '🔥 Срочное, просроченное и ничьё', '#b3310a');
+  svg += '<text x="' + (URGENT.x + URGENT.w - 14) + '" y="' + (URGENT.y + 24) +
+         '" font-size="12" text-anchor="end" fill="#b3310a">' + hot.length + '</text>';
+  if (!hot.length)
+    svg += '<text x="' + (URGENT.x + 16) + '" y="' + (URGENT.y + 56) +
+           '" font-size="11.5" fill="#d79384">чисто — срочного ничего нет</text>';
+  hot.slice(0, 4).forEach((x, i) => {
+    const nx = URGENT.x + 14 + i * 146, ny = URGENT.y + 36;
+    const who = (x.owners || []).length ? x.owner : 'ничья';
+    svg += '<a href="' + esc(x.url) + '" target="_blank" rel="noopener">' +
+           '<rect class="paper" x="' + nx + '" y="' + ny + '" width="134" height="70" rx="5" ' +
+           'fill="#ffffff" stroke="' + (x.urgent ? '#de350b' : '#f0b3a3') + '"><title>' +
+           esc(x.title) + '</title></rect>' +
+           '<rect x="' + nx + '" y="' + ny + '" width="4" height="70" rx="2" fill="' + hexOf(x.project) + '"/>' +
+           wrap(x.title, nx + 12, ny + 18, 112, 2, 10.5, '#2a3b57') +
+           '<text x="' + (nx + 12) + '" y="' + (ny + 60) + '" font-size="9.5" fill="' +
+           (x.status === 'overdue' ? '#de350b' : '#8b95a7') + '" pointer-events="none">' +
+           esc(who + ' · ' + (x.status === 'overdue' ? 'просрочено' : x.due ? shortDate(x.due) : 'без срока')) +
+           '</text></a>';
+  });
+  if (hot.length > 4)
+    svg += '<text x="' + (URGENT.x + URGENT.w - 14) + '" y="' + (URGENT.y + URGENT.h - 10) +
+           '" font-size="11" text-anchor="end" fill="#b3310a">ещё ' + (hot.length - 4) + '</text>';
+
+  /* ── зона кулера ── */
+  svg += panel(LOUNGE, '#f3f7fb', '#d5e3f0');
+  svg += label(LOUNGE.x + 14, LOUNGE.y + 24, 'Кулер', '#5b7794');
+  svg += '<rect x="' + (LOUNGE.x + 14) + '" y="' + (LOUNGE.y + 38) + '" width="20" height="30" rx="4" fill="#dce9f7" stroke="#b7cde6"/>';
+  svg += '<text x="' + (LOUNGE.x + 14) + '" y="' + (LOUNGE.y + 92) + '" font-size="10" fill="#92a7bb">кто свободен —</text>';
+  svg += '<text x="' + (LOUNGE.x + 14) + '" y="' + (LOUNGE.y + 105) + '" font-size="10" fill="#92a7bb">стоит здесь</text>';
+
+  /* ── столы людей ── */
+  const n = Math.max(1, names.length);
+  const gap = 14;
+  const dw = (DESKS.w - gap * (n - 1)) / n;
+  const desks = {};
+  names.forEach((name, i) => {
+    const z = { x: DESKS.x + i * (dw + gap), y: DESKS.y, w: dw, h: DESKS.h };
+    desks[name] = z;
+    const mine = desked.filter(t => (t.owners || []).includes(name) && !poolIds.has(t.id))
+                       .sort((a, b) => rank(a) - rank(b) || byDue(a, b));
+    const late = mine.filter(t => t.status === 'overdue').length;
+
+    svg += panel(z, '#ffffff', '#e4e6ea');
+    svg += '<text x="' + (z.x + 12) + '" y="' + (z.y + 22) + '" font-size="13.5" font-weight="600" fill="#172b4d">' +
+           esc(name) + '</text>';
+    svg += '<text x="' + (z.x + z.w - 12) + '" y="' + (z.y + 22) + '" font-size="11.5" text-anchor="end" fill="' +
+           (late ? '#de350b' : '#8b95a7') + '">' + mine.length + '</text>';
+
+    const tx = z.x + 8, ty = z.y + 32, tw = z.w - 16, th = ROWS * 20 + 10;
+    svg += '<rect x="' + tx + '" y="' + ty + '" width="' + tw + '" height="' + th +
+           '" rx="6" fill="#f8f9fb" stroke="#eceef1"/>';
+    mine.slice(0, ROWS).forEach((t, k) => {
+      const py = ty + 6 + k * 20;
+      const fill = t.status === 'overdue' ? '#ffd8cd' : t.status === 'noDate' ? '#f1f2f4' : '#eaf0ff';
+      svg += '<a href="' + esc(t.url) + '" target="_blank" rel="noopener">' +
+             '<rect class="paper" x="' + (tx + 6) + '" y="' + py + '" width="' + (tw - 12) +
+             '" height="16" rx="3" fill="' + fill + '" stroke="#d8dee9" stroke-opacity="0.7"><title>' +
+             esc(t.project + ' · ' + t.title + (t.due ? ' · ' + shortDate(t.due) : '')) + '</title></rect>' +
+             '<rect x="' + (tx + 6) + '" y="' + py + '" width="3" height="16" rx="1.5" fill="' + hexOf(t.project) + '"/>' +
+             '<text x="' + (tx + 14) + '" y="' + (py + 11.5) + '" font-size="9.5" fill="' +
+             (t.status === 'overdue' ? '#8b1a00' : '#2a3b57') + '" pointer-events="none">' +
+             esc(clip(t.title, tw - 22)) + '</text></a>';
+    });
+    if (mine.length > ROWS)
+      svg += '<text x="' + (tx + tw) + '" y="' + (ty + th + 14) + '" font-size="10" text-anchor="end" fill="#8b95a7">' +
+             'в очереди ещё ' + (mine.length - ROWS) + '</text>';
   });
 
-  /* комната ожидания */
-  svg += '<rect x="' + WAIT.x + '" y="' + WAIT.y + '" width="' + WAIT.w + '" height="' + WAIT.h +
-         '" rx="14" fill="#fff7e6" stroke="#ffb020" stroke-opacity="0.5"/>';
+  /* ── общий стол ── */
+  svg += panel(POOL, '#fcfcfd', '#e6e8ec');
+  svg += label(POOL.x + 14, POOL.y + 22, 'Общий стол: несрочное и без даты', '#6b778c');
+  svg += '<text x="' + (POOL.x + POOL.w - 14) + '" y="' + (POOL.y + 22) +
+         '" font-size="11.5" text-anchor="end" fill="#8b95a7">' + pool.length + '</text>';
+  pool.slice(0, 6).forEach((x, i) => {
+    const col = i % 2, row = (i / 2) | 0;
+    const pw = (POOL.w - 42) / 2;
+    const px = POOL.x + 14 + col * (pw + 14), py = POOL.y + 34 + row * 28;
+    svg += '<a href="' + esc(x.url) + '" target="_blank" rel="noopener">' +
+           '<rect class="paper" x="' + px + '" y="' + py + '" width="' + pw + '" height="22" rx="4" ' +
+           'fill="#f6f7f9" stroke="#e3e6eb"><title>' + esc(x.project + ' · ' + x.title) + '</title></rect>' +
+           '<rect x="' + px + '" y="' + py + '" width="3" height="22" rx="1.5" fill="' + hexOf(x.project) +
+           '" fill-opacity="0.6"/>' +
+           '<text x="' + (px + 10) + '" y="' + (py + 15) + '" font-size="10" fill="#6b778c" pointer-events="none">' +
+           esc(clip(x.title, pw - 50)) + '</text>' +
+           '<text x="' + (px + pw - 8) + '" y="' + (py + 15) + '" font-size="9" text-anchor="end" fill="#a3abb8" ' +
+           'pointer-events="none">' + esc(x.owner || 'ничья') + '</text></a>';
+  });
+  if (pool.length > 6)
+    svg += '<text x="' + (POOL.x + POOL.w - 14) + '" y="' + (POOL.y + POOL.h - 10) +
+           '" font-size="10" text-anchor="end" fill="#a3abb8">ещё ' + (pool.length - 6) + '</text>';
+
+  /* ── стол ИИ ── */
+  svg += panel(AI, '#f4f1fb', '#d9cff3');
+  svg += label(AI.x + 14, AI.y + 22, '🤖 Стол ИИ', '#5b4a97');
+  svg += '<text x="' + (AI.x + AI.w - 14) + '" y="' + (AI.y + 22) +
+         '" font-size="11.5" text-anchor="end" fill="#5b4a97">' + aiTasks.length + '</text>';
+  if (!aiTasks.length)
+    svg += '<text x="' + (AI.x + 14) + '" y="' + (AI.y + 48) + '" font-size="10.5" fill="#9e92c4">' +
+           'пометь задачу меткой «ИИ»</text>';
+  aiTasks.slice(0, 4).forEach((x, i) => {
+    const py = AI.y + 32 + i * 24;
+    svg += '<a href="' + esc(x.url) + '" target="_blank" rel="noopener">' +
+           '<rect class="paper" x="' + (AI.x + 12) + '" y="' + py + '" width="' + (AI.w - 24) +
+           '" height="19" rx="4" fill="#ffffff" stroke="#d9cff3"><title>' + esc(x.title) + '</title></rect>' +
+           '<text x="' + (AI.x + 20) + '" y="' + (py + 13) + '" font-size="9.5" fill="#4c3f80" ' +
+           'pointer-events="none">' + esc(clip(x.title, AI.w - 40)) + '</text></a>';
+  });
+
+  /* ── комната ожидания ── */
+  svg += panel(WAIT, '#fff7e6', '#ffd591');
   svg += '<text x="' + (WAIT.x + WAIT.w / 2) + '" y="' + (WAIT.y + 26) +
-         '" font-size="13" font-weight="600" text-anchor="middle" fill="#b06f00">Ждём</text>';
-  svg += '<text x="' + (WAIT.x + WAIT.w / 2) + '" y="' + (WAIT.y + 43) +
-         '" font-size="11" text-anchor="middle" fill="#b06f00">клиента</text>';
+         '" font-size="13" font-weight="600" text-anchor="middle" fill="#b06f00">Ждём клиента</text>';
   if (!waiting.length)
-    svg += '<text x="' + (WAIT.x + WAIT.w / 2) + '" y="' + (WAIT.y + 80) +
+    svg += '<text x="' + (WAIT.x + WAIT.w / 2) + '" y="' + (WAIT.y + 56) +
            '" font-size="11" text-anchor="middle" fill="#c9a24a">пусто</text>';
-  waiting.slice(0, 14).forEach((x, i) => {
-    const py = WAIT.y + 62 + i * 30;
+  waiting.slice(0, 11).forEach((x, i) => {
+    const py = WAIT.y + 40 + i * 46;
     svg += '<a href="' + esc(x.url) + '" target="_blank" rel="noopener">' +
            '<rect class="paper" x="' + (WAIT.x + 12) + '" y="' + py + '" width="' + (WAIT.w - 24) +
-           '" height="22" rx="4" fill="#ffe9bf" stroke="#ffb020" stroke-opacity="0.6"><title>' +
+           '" height="38" rx="5" fill="#ffffff" stroke="#ffc46b"><title>' +
            esc(x.project + ' · ' + x.title) + '</title></rect>' +
-           '<text x="' + (WAIT.x + WAIT.w / 2) + '" y="' + (py + 15) +
-           '" font-size="11" text-anchor="middle" fill="#b06f00" pointer-events="none">' +
-           (x.waitingDays != null ? x.waitingDays + ' ' + plural(x.waitingDays) : '—') + '</text></a>';
+           '<rect x="' + (WAIT.x + 12) + '" y="' + py + '" width="4" height="38" rx="2" fill="' + hexOf(x.project) + '"/>' +
+           wrap(x.title, WAIT.x + 22, py + 15, WAIT.w - 44, 1, 10, '#6b5120') +
+           '<text x="' + (WAIT.x + 22) + '" y="' + (py + 30) + '" font-size="9.5" fill="#b06f00" ' +
+           'pointer-events="none">' + (x.waitingDays != null ? x.waitingDays + ' ' + plural(x.waitingDays) : '—') +
+           ' без движения</text></a>';
   });
-
-  /* кулер */
-  svg += '<rect x="' + COOLER.x + '" y="' + (COOLER.y - 26) + '" width="18" height="26" rx="4" fill="#dce9f7" stroke="#b7cde6"/>';
-  svg += '<text x="' + (COOLER.x + 26) + '" y="' + (COOLER.y - 8) + '" font-size="11" fill="#6b778c">кулер</text>';
 
   zl.innerHTML = svg;
 
-  /* люди */
-  const names = [...new Set(all.flatMap(x => x.owners || []))].sort();
-  const perZone = {};
-  names.forEach(n => {
-    const mine = active.filter(x => (x.owners || []).includes(n))
-      .sort((a, b) => rank(a) - rank(b) || (a.due || '').localeCompare(b.due || ''));
-    const target = mine.length ? zoneOf(mine[0].project) : null;
-    const hasLate = mine.some(x => x.status === 'overdue');
-    const z = ZONES.find(x => x.key === target);
-    const idx = perZone[target || 'cooler'] = (perZone[target || 'cooler'] || 0) + 1;
-    const pos = z
-      ? { x: z.x + 46 + (idx - 1) * 52, y: z.y + z.h - 18 }
-      : { x: COOLER.x + 46 + (idx - 1) * 52, y: COOLER.y };
-    drawPerson(pl, n, pos, hasLate, mine.length);
+  /* ── люди ── */
+  const busy = {};
+  let idle = 0;
+  names.forEach((name, i) => {
+    const mine = desked.filter(t => (t.owners || []).includes(name) && !poolIds.has(t.id));
+    const hasLate = rest.some(t => (t.owners || []).includes(name) && t.status === 'overdue');
+    const z = desks[name];
+    let pos;
+    if (mine.length) pos = { x: z.x + z.w / 2, y: z.y + z.h - 12 };
+    else pos = { x: LOUNGE.x + 56 + (idle++) * 34, y: LOUNGE.y + LOUNGE.h - 14 };
+    drawPerson(pl, name, pos, hasLate, mine.length, SHIRT[i % SHIRT.length]);
+    busy[name] = 1;
   });
-  [...pl.children].forEach(g => {
-    if (!names.includes(g.dataset.name)) g.remove();
-  });
+  [...pl.children].forEach(g => { if (!busy[g.dataset.name]) g.remove(); });
+
+  /* легенда */
+  document.getElementById('legend').innerHTML =
+    Object.keys(HEX).map(k => '<span><i style="background:' + HEX[k] + '"></i>' + esc(k) + '</span>').join('') +
+    '<span>свободен — уходит к кулеру</span><span>клик по человеку — фильтр</span>';
 }
 
 const rank = x => x.status === 'overdue' ? 0 : x.status === 'week' ? 1 : x.status === 'noDate' ? 3 : 2;
 
-function drawPerson(layer, name, pos, late, count) {
+function panel(z, fill, stroke) {
+  return '<rect x="' + z.x + '" y="' + z.y + '" width="' + z.w + '" height="' + z.h +
+         '" rx="12" fill="' + fill + '" stroke="' + stroke + '"/>';
+}
+function label(x, y, text, color) {
+  return '<text x="' + x + '" y="' + y + '" font-size="12.5" font-weight="600" fill="' + color + '">' +
+         esc(text) + '</text>';
+}
+function wrap(text, x, y, px, lines, size, color) {
+  const max = Math.max(6, Math.floor(px / (size * 0.52)));
+  const words = String(text).split(' ');
+  const rows = []; let cur = '';
+  words.forEach(w => {
+    if ((cur + ' ' + w).trim().length <= max) cur = (cur + ' ' + w).trim();
+    else { if (cur) rows.push(cur); cur = w; }
+  });
+  if (cur) rows.push(cur);
+  return rows.slice(0, lines).map((r, i) => {
+    const last = i === Math.min(lines, rows.length) - 1 && rows.length > lines;
+    return '<text x="' + x + '" y="' + (y + i * (size + 2)) + '" font-size="' + size + '" fill="' + color +
+           '" pointer-events="none">' + esc(last ? clip(r, px) + '…' : r) + '</text>';
+  }).join('');
+}
+
+function drawPerson(layer, name, pos, late, count, shirt) {
   let g = [...layer.children].find(c => c.dataset.name === name);
   const fresh = !g;
   if (fresh) {
     g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     g.dataset.name = name;
     g.setAttribute('class', 'person');
-    g.innerHTML = person(name);
+    g.innerHTML = person(name, shirt);
     g.onclick = () => { fPerson = (fPerson === name ? null : name); render(); };
     layer.appendChild(g);
   }
-  g.querySelector('.badge').textContent = count ? count : '';
   g.querySelector('.alarm').setAttribute('opacity', late ? 1 : 0);
   g.classList.toggle('dim', !!fPerson && fPerson !== name);
 
@@ -443,22 +515,17 @@ function drawPerson(layer, name, pos, late, count) {
   g.timer = setTimeout(() => g.classList.remove('walk'), 1500);
 }
 
-function person(name) {
-  const c = '#4c6ef5';
+function person(name, shirt) {
   return '' +
-    '<ellipse cx="0" cy="2" rx="13" ry="4" fill="#172b4d" opacity="0.08"/>' +
-    '<g class="leg leg-l"><rect x="-6" y="-13" width="4.5" height="14" rx="2" fill="#344563"/></g>' +
-    '<g class="leg leg-r"><rect x="1.5" y="-13" width="4.5" height="14" rx="2" fill="#344563"/></g>' +
+    '<ellipse cx="0" cy="2" rx="12" ry="3.5" fill="#172b4d" opacity="0.08"/>' +
+    '<g class="leg leg-l"><rect x="-5.5" y="-12" width="4" height="13" rx="2" fill="#344563"/></g>' +
+    '<g class="leg leg-r"><rect x="1.5" y="-12" width="4" height="13" rx="2" fill="#344563"/></g>' +
     '<g class="torso">' +
-      '<rect x="-9" y="-31" width="18" height="20" rx="7" fill="' + c + '"/>' +
-      '<circle cx="0" cy="-38" r="8" fill="#f4d3b6"/>' +
-      '<path d="M-8 -41 q8 -7 16 0 q-8 -3 -16 0z" fill="#3b2f2a"/>' +
-      '<circle class="alarm" cx="11" cy="-46" r="5.5" fill="#de350b" opacity="0"/>' +
-      '<text class="badge" x="0" y="-54" font-size="11" font-weight="600" ' +
-        'text-anchor="middle" fill="#6b778c"></text>' +
-    '</g>' +
-    '<text x="0" y="16" font-size="12" font-weight="500" text-anchor="middle" fill="#172b4d">' +
-      esc(name) + '</text>';
+      '<rect x="-8" y="-29" width="16" height="18" rx="6.5" fill="' + shirt + '"/>' +
+      '<circle cx="0" cy="-35" r="7" fill="#f4d3b6"/>' +
+      '<path d="M-7 -38 q7 -6 14 0 q-7 -2.5 -14 0z" fill="#3b2f2a"/>' +
+      '<circle class="alarm" cx="10" cy="-42" r="5" fill="#de350b" opacity="0"/>' +
+    '</g>';
 }
 
 /* ── мелочи ────────────────────────────────────────────────── */
@@ -474,11 +541,11 @@ function dayLabel(iso) {
 function shortDate(s) {
   if (!s) return '';
   const d = new Date(s.replace(' ', 'T') + ':00');
-  return d.getDate() + ' ' + MONTHS[d.getMonth()] + (s.slice(11) !== '09:00' ? ', ' + s.slice(11) : '');
+  return d.getDate() + ' ' + MONTHS[d.getMonth()];
 }
 const clip = (s, px) => {
-  const max = Math.max(6, Math.floor(px / 5.6));
-  return s.length > max ? s.slice(0, max - 1).trimEnd() + '…' : s;
+  const max = Math.max(5, Math.floor(px / 5.2));
+  return String(s).length > max ? String(s).slice(0, max - 1).trimEnd() + '…' : String(s);
 };
 const plural = n => (n % 10 === 1 && n % 100 !== 11) ? 'день'
   : ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) ? 'дня' : 'дней';
