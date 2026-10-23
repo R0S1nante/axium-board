@@ -278,8 +278,8 @@ function renderOffice(items, data) {
   const aiTasks = live.filter(x => x.ai);
   const rest    = live.filter(x => !x.ai);
 
-  /* на доску срочного: помеченные, просроченные и ничьи */
-  const hot = rest.filter(x => x.urgent || x.status === 'overdue' || !(x.owners || []).length)
+  /* на доску срочного: помеченные «Срочно» и ничьи — то, что может подхватить любой */
+  const hot = rest.filter(x => x.urgent || !(x.owners || []).length)
                   .sort((a, b) => (b.urgent ? 1 : 0) - (a.urgent ? 1 : 0) ||
                                   rank(a) - rank(b) || byDue(a, b));
   const hotIds = new Set(hot.map(x => x.id));
@@ -312,7 +312,7 @@ function renderOffice(items, data) {
 
   /* ── доска срочного ── */
   svg += panel(URGENT, '#fff6f4', '#ffbdad');
-  svg += label(URGENT.x + 16, URGENT.y + 24, '🔥 Срочное, просроченное и ничьё', '#b3310a');
+  svg += label(URGENT.x + 16, URGENT.y + 24, '🔥 Срочное и ничьё — можно подхватить', '#b3310a');
   svg += '<text x="' + (URGENT.x + URGENT.w - 14) + '" y="' + (URGENT.y + 24) +
          '" font-size="12" text-anchor="end" fill="#b3310a">' + hot.length + '</text>';
   if (!hot.length)
@@ -339,9 +339,9 @@ function renderOffice(items, data) {
   /* ── зона кулера ── */
   svg += panel(LOUNGE, '#f3f7fb', '#d5e3f0');
   svg += label(LOUNGE.x + 14, LOUNGE.y + 24, 'Кулер', '#5b7794');
-  svg += '<rect x="' + (LOUNGE.x + 14) + '" y="' + (LOUNGE.y + 38) + '" width="20" height="30" rx="4" fill="#dce9f7" stroke="#b7cde6"/>';
-  svg += '<text x="' + (LOUNGE.x + 14) + '" y="' + (LOUNGE.y + 92) + '" font-size="10" fill="#92a7bb">кто свободен —</text>';
-  svg += '<text x="' + (LOUNGE.x + 14) + '" y="' + (LOUNGE.y + 105) + '" font-size="10" fill="#92a7bb">стоит здесь</text>';
+  svg += '<rect x="' + (LOUNGE.x + 14) + '" y="' + (LOUNGE.y + 34) + '" width="18" height="28" rx="4" fill="#dce9f7" stroke="#b7cde6"/>';
+  svg += '<text x="' + (LOUNGE.x + 40) + '" y="' + (LOUNGE.y + 46) + '" font-size="9.5" fill="#92a7bb">кто свободен —</text>';
+  svg += '<text x="' + (LOUNGE.x + 40) + '" y="' + (LOUNGE.y + 58) + '" font-size="9.5" fill="#92a7bb">стоит здесь</text>';
 
   /* ── столы людей ── */
   const n = Math.max(1, names.length);
@@ -396,9 +396,9 @@ function renderOffice(items, data) {
            '<rect x="' + px + '" y="' + py + '" width="3" height="22" rx="1.5" fill="' + hexOf(x.project) +
            '" fill-opacity="0.6"/>' +
            '<text x="' + (px + 10) + '" y="' + (py + 15) + '" font-size="10" fill="#6b778c" pointer-events="none">' +
-           esc(clip(x.title, pw - 50)) + '</text>' +
+           esc(clip(x.title, pw - 108)) + '</text>' +
            '<text x="' + (px + pw - 8) + '" y="' + (py + 15) + '" font-size="9" text-anchor="end" fill="#a3abb8" ' +
-           'pointer-events="none">' + esc(x.owner || 'ничья') + '</text></a>';
+           'pointer-events="none">' + esc(clip(x.owner || 'ничья', 84)) + '</text></a>';
   });
   if (pool.length > 6)
     svg += '<text x="' + (POOL.x + POOL.w - 14) + '" y="' + (POOL.y + POOL.h - 10) +
@@ -451,9 +451,10 @@ function renderOffice(items, data) {
     const hasLate = rest.some(t => (t.owners || []).includes(name) && t.status === 'overdue');
     const z = desks[name];
     let pos;
-    if (mine.length) pos = { x: z.x + z.w / 2, y: z.y + z.h - 12 };
-    else pos = { x: LOUNGE.x + 56 + (idle++) * 34, y: LOUNGE.y + LOUNGE.h - 14 };
-    drawPerson(pl, name, pos, hasLate, mine.length, SHIRT[i % SHIRT.length]);
+    const atDesk = mine.length > 0;
+    if (atDesk) pos = { x: z.x + z.w / 2, y: z.y + z.h - 12 };
+    else pos = { x: LOUNGE.x + 34 + (idle++) * 32, y: LOUNGE.y + LOUNGE.h - 12 };
+    drawPerson(pl, name, pos, hasLate, SHIRT[i % SHIRT.length], atDesk ? '' : name);
     busy[name] = 1;
   });
   [...pl.children].forEach(g => { if (!busy[g.dataset.name]) g.remove(); });
@@ -490,7 +491,7 @@ function wrap(text, x, y, px, lines, size, color) {
   }).join('');
 }
 
-function drawPerson(layer, name, pos, late, count, shirt) {
+function drawPerson(layer, name, pos, late, shirt, caption) {
   let g = [...layer.children].find(c => c.dataset.name === name);
   const fresh = !g;
   if (fresh) {
@@ -502,6 +503,7 @@ function drawPerson(layer, name, pos, late, count, shirt) {
     layer.appendChild(g);
   }
   g.querySelector('.alarm').setAttribute('opacity', late ? 1 : 0);
+  g.querySelector('.nm').textContent = caption || '';
   g.classList.toggle('dim', !!fPerson && fPerson !== name);
 
   const prev = spots[name];
@@ -525,7 +527,8 @@ function person(name, shirt) {
       '<circle cx="0" cy="-35" r="7" fill="#f4d3b6"/>' +
       '<path d="M-7 -38 q7 -6 14 0 q-7 -2.5 -14 0z" fill="#3b2f2a"/>' +
       '<circle class="alarm" cx="10" cy="-42" r="5" fill="#de350b" opacity="0"/>' +
-    '</g>';
+    '</g>' +
+    '<text class="nm" x="0" y="14" font-size="9.5" text-anchor="middle" fill="#6b778c"></text>';
 }
 
 /* ── мелочи ────────────────────────────────────────────────── */
