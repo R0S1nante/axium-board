@@ -9,7 +9,7 @@
   :root{
     --bg:#f4f5f7; --card:#ffffff; --ink:#172b4d; --mute:#6b778c;
     --line:#dfe1e6; --red:#de350b; --amber:#ff8b00; --green:#36b37e;
-    --blue:#0052cc; --violet:#6554c0;
+    --blue:#0052cc;
     --p1:#6554c0; --p2:#e5478a; --p3:#ff5630; --p0:#5e6c84;
   }
   *{box-sizing:border-box}
@@ -18,15 +18,21 @@
     font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
     -webkit-font-smoothing:antialiased;
   }
-  .wrap{max-width:860px; margin:0 auto; padding:16px 16px 64px}
+  .wrap{max-width:1000px; margin:0 auto; padding:16px 16px 64px}
 
-  header{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:4px}
+  header{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:4px}
   h1{font-size:20px; margin:0; letter-spacing:-.2px}
   .upd{color:var(--mute); font-size:12px}
   .upd button{
     border:0; background:none; color:var(--blue); cursor:pointer;
     font:inherit; padding:0 0 0 6px; text-decoration:underline;
   }
+  .tabs{margin-left:auto; display:flex; background:var(--line); border-radius:999px; padding:2px}
+  .tabs button{
+    border:0; background:none; font:inherit; font-size:13px; color:var(--mute);
+    padding:5px 14px; border-radius:999px; cursor:pointer;
+  }
+  .tabs button.on{background:var(--card); color:var(--ink); font-weight:500}
 
   .meter{
     display:flex; align-items:center; gap:10px; background:var(--card);
@@ -45,16 +51,13 @@
     display:inline-flex; align-items:center; gap:6px;
   }
   .chip.on{background:var(--ink); color:#fff; border-color:var(--ink)}
-  .chip .n{opacity:.6; font-size:12px}
 
   h2{
     font-size:12px; text-transform:uppercase; letter-spacing:.7px; color:var(--mute);
     margin:24px 0 8px; display:flex; align-items:center; gap:8px;
   }
-  h2 .count{
-    background:var(--line); color:var(--mute); border-radius:999px;
-    padding:1px 7px; font-size:11px; letter-spacing:0;
-  }
+  h2 .count{background:var(--line); color:var(--mute); border-radius:999px;
+            padding:1px 7px; font-size:11px; letter-spacing:0}
   h2.hot{color:var(--red)} h2.hot .count{background:#ffebe6; color:var(--red)}
   h2.wait{color:var(--amber)} h2.wait .count{background:#fff7e6; color:var(--amber)}
 
@@ -63,7 +66,7 @@
     border:1px solid var(--line); border-left:3px solid var(--p0);
     border-radius:8px; padding:10px 12px; margin-bottom:6px;
   }
-  .card:hover{border-color:#c1c7d0; border-left-color:inherit}
+  .card:hover{border-color:#c1c7d0}
   .card .t{font-weight:500}
   .card .m{display:flex; gap:10px; flex-wrap:wrap; margin-top:3px; font-size:12px; color:var(--mute)}
   .card .m .who{color:var(--ink); font-weight:500}
@@ -79,11 +82,34 @@
   details summary::before{content:"▸ "}
   details[open] summary::before{content:"▾ "}
 
-  .empty{color:var(--mute); padding:28px 0; text-align:center}
-  .err{
-    background:#ffebe6; border:1px solid #ffbdad; color:var(--red);
-    border-radius:8px; padding:14px; margin-top:16px;
+  /* ── офис ─────────────────────────────────────────────── */
+  #office{display:none}
+  body.office #office{display:block}
+  body.office #list{display:none}
+  .stage{
+    width:100%; height:auto; display:block; background:var(--card);
+    border:1px solid var(--line); border-radius:12px;
   }
+  .person{transition:transform 1.4s cubic-bezier(.45,.05,.3,1)}
+  .person{cursor:pointer}
+  .person .body{transition:opacity .2s}
+  .person.dim{opacity:.3}
+  .leg{transform-origin:center top}
+  .person.walk .leg-l{animation:step .5s linear infinite}
+  .person.walk .leg-r{animation:step .5s linear infinite .25s}
+  .person.walk .torso{animation:bob .5s ease-in-out infinite}
+  @keyframes step{0%{transform:rotate(16deg)}50%{transform:rotate(-16deg)}100%{transform:rotate(16deg)}}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.4px)}}
+  .paper{cursor:pointer}
+  .paper:hover{filter:brightness(.94)}
+  .legend{
+    display:flex; gap:16px; flex-wrap:wrap; color:var(--mute);
+    font-size:12px; margin-top:10px;
+  }
+
+  .empty{color:var(--mute); padding:28px 0; text-align:center}
+  .err{background:#ffebe6; border:1px solid #ffbdad; color:var(--red);
+       border-radius:8px; padding:14px; margin-top:16px}
   @media (max-width:480px){ .wrap{padding:12px 12px 56px} h1{font-size:18px} }
 </style>
 </head>
@@ -92,6 +118,10 @@
   <header>
     <h1>Axium · Доска</h1>
     <div class="upd" id="upd">загружаю…</div>
+    <div class="tabs">
+      <button id="tabList" class="on" onclick="setView('list')">Список</button>
+      <button id="tabOffice" onclick="setView('office')">Офис</button>
+    </div>
   </header>
 
   <div class="meter" id="meter" hidden>
@@ -103,7 +133,19 @@
   <div class="chips" id="people"></div>
   <div class="chips" id="projects"></div>
 
-  <div id="out"><div class="empty">загружаю…</div></div>
+  <div id="list"><div class="empty">загружаю…</div></div>
+
+  <div id="office">
+    <svg class="stage" viewBox="0 0 1000 640" id="svg">
+      <g id="zoneLayer"></g>
+      <g id="peopleLayer"></g>
+    </svg>
+    <div class="legend">
+      <span>Человек стоит у проекта, где его ближайшая задача</span>
+      <span>Красный кружок над головой — есть просрочка</span>
+      <span>Наведи на бумагу — название задачи, клик — Trello</span>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -111,18 +153,32 @@
 const API_URL = 'https://script.google.com/macros/s/AKfycbzBWd4uyyfDpYFpPw9EAl_Adtm6e4mAiniJgj2uBRmBkP5G5zhpqmqu1cF1BFzKp-pR/exec';
 const KEY = new URLSearchParams(location.search).get('k') || '';
 
-/* цвет проекта по первому слову названия */
 const COLORS = [
   [/призван/i, 'var(--p1)'],
   [/cosmica|космик/i, 'var(--p2)'],
-  [/картинг|racing/i, 'var(--p3)']
+  [/racing|картинг/i, 'var(--p3)']
 ];
+const HEX = { 'Призвание':'#6554c0', 'Cosmica':'#e5478a', 'Racing Stars':'#ff5630', 'Общее':'#5e6c84' };
 const colorOf = p => (COLORS.find(c => c[0].test(p)) || [null, 'var(--p0)'])[1];
+const hexOf = p => HEX[p] || '#5e6c84';
 
 const DAYS = ['вс','пн','вт','ср','чт','пт','сб'];
 const MONTHS = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
 
+/* планировка офиса, координаты в системе 1000×640 */
+const ZONES = [
+  { key:'Призвание',    x: 30, y: 54, w:390, h:240 },
+  { key:'Cosmica',      x:440, y: 54, w:390, h:240 },
+  { key:'Racing Stars', x: 30, y:320, w:390, h:240 },
+  { key:'Общее',        x:440, y:320, w:390, h:240 }
+];
+const WAIT = { x:850, y:54, w:120, h:506 };
+const COOLER = { x:120, y:600 };
+const OVERLOAD = 6;
+
 let DATA = null, fPerson = null, fProject = null;
+let view = localStorage.getItem('axium-view') || 'list';
+const spots = {};
 
 /* ── загрузка ──────────────────────────────────────────────── */
 async function load(fresh) {
@@ -140,10 +196,19 @@ async function load(fresh) {
 
 function fail(msg) {
   document.getElementById('upd').textContent = '';
-  document.getElementById('out').innerHTML = '<div class="err">' + esc(msg) + '</div>';
+  document.getElementById('list').innerHTML = '<div class="err">' + esc(msg) + '</div>';
 }
 
-/* ── отрисовка ─────────────────────────────────────────────── */
+function setView(v) {
+  view = v;
+  localStorage.setItem('axium-view', v);
+  document.body.classList.toggle('office', v === 'office');
+  document.getElementById('tabList').classList.toggle('on', v === 'list');
+  document.getElementById('tabOffice').classList.toggle('on', v === 'office');
+  if (DATA) render();
+}
+
+/* ── общая отрисовка ───────────────────────────────────────── */
 function render() {
   const d = DATA;
 
@@ -170,6 +235,27 @@ function render() {
     (!fPerson || (x.owners || []).includes(fPerson)) &&
     (!fProject || x.project === fProject));
 
+  if (view === 'office') renderOffice(items, d.items);
+  else renderList(items);
+}
+
+function chips(id, vals, active, cb, color) {
+  const box = document.getElementById(id);
+  box.innerHTML = '';
+  if (vals.length < 2) return;
+  const mk = (label, val, dot) => {
+    const b = document.createElement('button');
+    b.className = 'chip' + (active === val ? ' on' : '');
+    b.innerHTML = (dot ? '<i class="dot" style="background:' + colorOf(val) + '"></i>' : '') + esc(label);
+    b.onclick = () => cb(active === val ? null : val);
+    box.appendChild(b);
+  };
+  mk('все', null, false);
+  vals.forEach(v => mk(v, v, color));
+}
+
+/* ── режим: список ─────────────────────────────────────────── */
+function renderList(items) {
   const out = [];
   const late = items.filter(x => x.status === 'overdue')
                     .sort((a, b) => (a.due || '').localeCompare(b.due || ''));
@@ -190,36 +276,18 @@ function render() {
   if (none.length) out.push(sec('Без срока', none));
   if (next.length) out.push(fold('Дальше', next));
 
-  document.getElementById('out').innerHTML =
+  document.getElementById('list').innerHTML =
     out.join('') || '<div class="empty">Ничего не найдено</div>';
-}
-
-function chips(id, vals, active, cb, color) {
-  const box = document.getElementById(id);
-  box.innerHTML = '';
-  if (vals.length < 2) return;
-  const mk = (label, val, dot) => {
-    const b = document.createElement('button');
-    b.className = 'chip' + (active === val ? ' on' : '');
-    b.innerHTML = (dot ? '<i class="dot" style="background:' + colorOf(val) + '"></i>' : '') + esc(label);
-    b.onclick = () => cb(active === val ? null : val);
-    box.appendChild(b);
-  };
-  mk('все', null, false);
-  vals.forEach(v => mk(v, v, color));
 }
 
 function sec(title, arr, cls) {
   return '<h2 class="' + (cls || '') + '">' + esc(title) +
-         '<span class="count">' + arr.length + '</span></h2>' +
-         arr.map(card).join('');
+         '<span class="count">' + arr.length + '</span></h2>' + arr.map(card).join('');
 }
-
 function fold(title, arr) {
   return '<details><summary>' + esc(title) + ' · ' + arr.length + '</summary>' +
          arr.map(card).join('') + '</details>';
 }
-
 function card(x) {
   const meta = [];
   if (x.owner) meta.push('<span class="who">' + esc(x.owner) + '</span>');
@@ -229,13 +297,157 @@ function card(x) {
     meta.push('<span class="late">просрочено ' + esc(shortDate(x.due)) + '</span>');
   else if (x.status === 'waiting' && x.waitingDays != null)
     meta.push('<span class="days">без движения ' + x.waitingDays + ' ' + plural(x.waitingDays) + '</span>');
-  else if (x.due)
-    meta.push('<span>' + esc(shortDate(x.due)) + '</span>');
+  else if (x.due) meta.push('<span>' + esc(shortDate(x.due)) + '</span>');
 
-  return '<a class="card" style="border-left-color:' + colorOf(x.project) + '" ' +
-         'href="' + esc(x.url) + '" target="_blank" rel="noopener">' +
-         '<div class="t">' + esc(x.title) + '</div>' +
-         '<div class="m">' + meta.join('') + '</div></a>';
+  return '<a class="card" style="border-left-color:' + colorOf(x.project) + '" href="' +
+         esc(x.url) + '" target="_blank" rel="noopener"><div class="t">' + esc(x.title) +
+         '</div><div class="m">' + meta.join('') + '</div></a>';
+}
+
+/* ── режим: офис ───────────────────────────────────────────── */
+function renderOffice(items, all) {
+  const zl = document.getElementById('zoneLayer');
+  const pl = document.getElementById('peopleLayer');
+
+  const zoneOf = p => ZONES.find(z => z.key === p) ? p : 'Общее';
+  const active = items.filter(x => x.status !== 'waiting');
+  const waiting = items.filter(x => x.status === 'waiting');
+
+  let svg = '<rect x="0" y="0" width="1000" height="640" rx="12" fill="#fbfbfc"/>';
+
+  /* зоны */
+  ZONES.forEach(z => {
+    const mine = active.filter(x => zoneOf(x.project) === z.key);
+    const late = mine.filter(x => x.status === 'overdue').length;
+    const over = mine.length > OVERLOAD;
+    const c = hexOf(z.key);
+
+    svg += '<rect x="' + z.x + '" y="' + z.y + '" width="' + z.w + '" height="' + z.h +
+           '" rx="14" fill="' + c + '" fill-opacity="0.05" stroke="' + (over ? '#de350b' : c) +
+           '" stroke-opacity="' + (over ? 0.9 : 0.25) + '"' + (over ? ' stroke-dasharray="6 4"' : '') + '/>';
+    svg += '<circle cx="' + (z.x + 20) + '" cy="' + (z.y + 24) + '" r="5" fill="' + c + '"/>';
+    svg += '<text x="' + (z.x + 34) + '" y="' + (z.y + 29) + '" font-size="15" font-weight="600" fill="#172b4d">' +
+           esc(z.key) + '</text>';
+    svg += '<text x="' + (z.x + z.w - 16) + '" y="' + (z.y + 29) + '" font-size="13" text-anchor="end" fill="' +
+           (over ? '#de350b' : '#6b778c') + '">' + mine.length +
+           (late ? ' · ' + late + ' просроч.' : '') + '</text>';
+
+    /* стол */
+    const dx = z.x + 24, dy = z.y + 48, dw = z.w - 48, dh = 112;
+    svg += '<rect x="' + dx + '" y="' + dy + '" width="' + dw + '" height="' + dh +
+           '" rx="8" fill="#ffffff" stroke="#e4e6ea"/>';
+
+    /* бумаги на столе */
+    mine.slice(0, 12).forEach((x, i) => {
+      const col = i % 2, row = (i / 2) | 0;
+      const px = dx + 14 + col * (dw / 2 - 6);
+      const py = dy + 12 + row * 17;
+      const w = dw / 2 - 28 + (i % 3) * 4;
+      const fill = x.status === 'overdue' ? '#ffd8cd'
+                 : x.status === 'noDate' ? '#eceef1' : '#dfe8ff';
+      const stroke = x.status === 'overdue' ? '#de350b' : '#b8c4de';
+      svg += '<a href="' + esc(x.url) + '" target="_blank" rel="noopener"><rect class="paper" x="' + px +
+             '" y="' + py + '" width="' + w + '" height="11" rx="3" fill="' + fill +
+             '" stroke="' + stroke + '" stroke-opacity="0.5"><title>' +
+             esc((x.owner ? x.owner + ' · ' : '') + x.title + (x.due ? ' · ' + shortDate(x.due) : '')) +
+             '</title></rect></a>';
+    });
+    if (mine.length > 12)
+      svg += '<text x="' + (dx + dw - 8) + '" y="' + (dy + dh - 8) +
+             '" font-size="11" text-anchor="end" fill="#6b778c">ещё ' + (mine.length - 12) + '</text>';
+  });
+
+  /* комната ожидания */
+  svg += '<rect x="' + WAIT.x + '" y="' + WAIT.y + '" width="' + WAIT.w + '" height="' + WAIT.h +
+         '" rx="14" fill="#fff7e6" stroke="#ffb020" stroke-opacity="0.5"/>';
+  svg += '<text x="' + (WAIT.x + WAIT.w / 2) + '" y="' + (WAIT.y + 26) +
+         '" font-size="13" font-weight="600" text-anchor="middle" fill="#b06f00">Ждём</text>';
+  svg += '<text x="' + (WAIT.x + WAIT.w / 2) + '" y="' + (WAIT.y + 43) +
+         '" font-size="11" text-anchor="middle" fill="#b06f00">клиента</text>';
+  if (!waiting.length)
+    svg += '<text x="' + (WAIT.x + WAIT.w / 2) + '" y="' + (WAIT.y + 80) +
+           '" font-size="11" text-anchor="middle" fill="#c9a24a">пусто</text>';
+  waiting.slice(0, 14).forEach((x, i) => {
+    const py = WAIT.y + 62 + i * 30;
+    svg += '<a href="' + esc(x.url) + '" target="_blank" rel="noopener">' +
+           '<rect class="paper" x="' + (WAIT.x + 12) + '" y="' + py + '" width="' + (WAIT.w - 24) +
+           '" height="22" rx="4" fill="#ffe9bf" stroke="#ffb020" stroke-opacity="0.6"><title>' +
+           esc(x.project + ' · ' + x.title) + '</title></rect>' +
+           '<text x="' + (WAIT.x + WAIT.w / 2) + '" y="' + (py + 15) +
+           '" font-size="11" text-anchor="middle" fill="#b06f00" pointer-events="none">' +
+           (x.waitingDays != null ? x.waitingDays + ' ' + plural(x.waitingDays) : '—') + '</text></a>';
+  });
+
+  /* кулер */
+  svg += '<rect x="' + COOLER.x + '" y="' + (COOLER.y - 26) + '" width="18" height="26" rx="4" fill="#dce9f7" stroke="#b7cde6"/>';
+  svg += '<text x="' + (COOLER.x + 26) + '" y="' + (COOLER.y - 8) + '" font-size="11" fill="#6b778c">кулер</text>';
+
+  zl.innerHTML = svg;
+
+  /* люди */
+  const names = [...new Set(all.flatMap(x => x.owners || []))].sort();
+  const perZone = {};
+  names.forEach(n => {
+    const mine = active.filter(x => (x.owners || []).includes(n))
+      .sort((a, b) => rank(a) - rank(b) || (a.due || '').localeCompare(b.due || ''));
+    const target = mine.length ? zoneOf(mine[0].project) : null;
+    const hasLate = mine.some(x => x.status === 'overdue');
+    const z = ZONES.find(x => x.key === target);
+    const idx = perZone[target || 'cooler'] = (perZone[target || 'cooler'] || 0) + 1;
+    const pos = z
+      ? { x: z.x + 46 + (idx - 1) * 52, y: z.y + z.h - 18 }
+      : { x: COOLER.x + 46 + (idx - 1) * 52, y: COOLER.y };
+    drawPerson(pl, n, pos, hasLate, mine.length);
+  });
+  [...pl.children].forEach(g => {
+    if (!names.includes(g.dataset.name)) g.remove();
+  });
+}
+
+const rank = x => x.status === 'overdue' ? 0 : x.status === 'week' ? 1 : x.status === 'noDate' ? 3 : 2;
+
+function drawPerson(layer, name, pos, late, count) {
+  let g = [...layer.children].find(c => c.dataset.name === name);
+  const fresh = !g;
+  if (fresh) {
+    g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.dataset.name = name;
+    g.setAttribute('class', 'person');
+    g.innerHTML = person(name);
+    g.onclick = () => { fPerson = (fPerson === name ? null : name); render(); };
+    layer.appendChild(g);
+  }
+  g.querySelector('.badge').textContent = count ? count : '';
+  g.querySelector('.alarm').setAttribute('opacity', late ? 1 : 0);
+  g.classList.toggle('dim', !!fPerson && fPerson !== name);
+
+  const prev = spots[name];
+  spots[name] = pos;
+  const move = () => g.setAttribute('transform', 'translate(' + pos.x + ',' + pos.y + ')');
+  if (fresh || !prev) { move(); return; }
+  if (prev.x === pos.x && prev.y === pos.y) return;
+  g.classList.add('walk');
+  move();
+  clearTimeout(g.timer);
+  g.timer = setTimeout(() => g.classList.remove('walk'), 1500);
+}
+
+function person(name) {
+  const c = '#4c6ef5';
+  return '' +
+    '<ellipse cx="0" cy="2" rx="13" ry="4" fill="#172b4d" opacity="0.08"/>' +
+    '<g class="leg leg-l"><rect x="-6" y="-13" width="4.5" height="14" rx="2" fill="#344563"/></g>' +
+    '<g class="leg leg-r"><rect x="1.5" y="-13" width="4.5" height="14" rx="2" fill="#344563"/></g>' +
+    '<g class="torso">' +
+      '<rect x="-9" y="-31" width="18" height="20" rx="7" fill="' + c + '"/>' +
+      '<circle cx="0" cy="-38" r="8" fill="#f4d3b6"/>' +
+      '<path d="M-8 -41 q8 -7 16 0 q-8 -3 -16 0z" fill="#3b2f2a"/>' +
+      '<circle class="alarm" cx="11" cy="-46" r="5.5" fill="#de350b" opacity="0"/>' +
+      '<text class="badge" x="0" y="-54" font-size="11" font-weight="600" ' +
+        'text-anchor="middle" fill="#6b778c"></text>' +
+    '</g>' +
+    '<text x="0" y="16" font-size="12" font-weight="500" text-anchor="middle" fill="#172b4d">' +
+      esc(name) + '</text>';
 }
 
 /* ── мелочи ────────────────────────────────────────────────── */
@@ -248,20 +460,17 @@ function dayLabel(iso) {
   if (diff === 1) return 'Завтра · ' + base;
   return base.charAt(0).toUpperCase() + base.slice(1);
 }
-
 function shortDate(s) {
   if (!s) return '';
   const d = new Date(s.replace(' ', 'T') + ':00');
-  return d.getDate() + ' ' + MONTHS[d.getMonth()] +
-         (s.slice(11) !== '09:00' ? ', ' + s.slice(11) : '');
+  return d.getDate() + ' ' + MONTHS[d.getMonth()] + (s.slice(11) !== '09:00' ? ', ' + s.slice(11) : '');
 }
-
 const plural = n => (n % 10 === 1 && n % 100 !== 11) ? 'день'
   : ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) ? 'дня' : 'дней';
-
 const esc = s => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+setView(view);
 load();
 setInterval(() => load(), 300000);
 </script>
