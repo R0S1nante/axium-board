@@ -118,6 +118,30 @@
   }
   .tag i.hot{background:#ff5630; color:#fff}
 
+  /* ── метка на рабочем месте ── */
+  .desk{position:absolute; z-index:5; transform:translate(-50%,-50%)}
+  .desk:hover{z-index:9}
+  .pin{
+    position:relative; display:flex; align-items:center; justify-content:center;
+    width:1.9em; height:1.9em; border-radius:50%; cursor:default;
+    background:#ffd43b; color:#1b1b1b; font-size:.66em; font-weight:750;
+    box-shadow:0 3px 10px rgba(0,0,0,.35);
+  }
+  .pin.hot{background:#ff5630; color:#fff}
+  .pin span{
+    position:absolute; inset:0; border-radius:50%;
+    background:inherit; opacity:.55; animation:ping 2.4s ease-out infinite;
+  }
+  .desk .who{
+    position:absolute; left:50%; top:112%; transform:translateX(-50%);
+    white-space:nowrap; font-size:.6em; font-weight:600; letter-spacing:.4px;
+    text-shadow:0 1px 4px rgba(0,0,0,.8); opacity:.9;
+  }
+  .desk .card{bottom:auto; top:128%; transform:translateX(-50%) translateY(-8px)}
+  .desk:hover .card{opacity:1; transform:translateX(-50%) translateY(0)}
+  .desk .card::after{top:auto; bottom:100%; border-top-color:transparent;
+                     border-bottom-color:rgba(255,255,255,.97)}
+
   /* карточка задач человека — только при наведении */
   .card{
     position:absolute; left:50%; bottom:118%; transform:translateX(-50%) translateY(8px);
@@ -146,6 +170,7 @@
   @keyframes idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-.5%)}}
   @keyframes in{from{opacity:0; transform:translateY(-12px)}to{opacity:1; transform:none}}
   @keyframes pulse{0%,100%{opacity:1; transform:scale(1)}50%{opacity:.35; transform:scale(.8)}}
+  @keyframes ping{0%{transform:scale(1); opacity:.55}70%,100%{transform:scale(2.3); opacity:0}}
 </style>
 </head>
 <body>
@@ -180,10 +205,16 @@ const SHIRT = ['#4c6ef5','#12b886','#f59f00','#e8590c','#845ef7','#15aabf'];
 const HAIR  = ['#2b2420','#4a3426','#17161a','#6b4a2f','#2f2b45','#3a2b22'];
 const MONTHS = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
 
-const SPOTS = [
-  { x:37, y:60 }, { x:50, y:74 }, { x:63, y:60 }, { x:72, y:76 },
-  { x:43, y:84 }, { x:66, y:48 }
+/* Рабочие места: pin — точка на мониторе, stand — где стоит человек.
+   Проценты от кадра. Подгоняются под office.png. */
+const DESKS = [
+  { pin:{ x:15.5, y:29 }, stand:{ x:21, y:46 } },   /* стол слева, боком      */
+  { pin:{ x:38,   y:20 }, stand:{ x:37, y:40 } },   /* задний левый           */
+  { pin:{ x:60,   y:20 }, stand:{ x:61, y:40 } },   /* задний правый          */
+  { pin:{ x:21,   y:60 }, stand:{ x:33, y:72 } }    /* большой стол внизу     */
 ];
+/* куда отходят от стола */
+const LOUNGE = [{ x:72, y:72 }, { x:64, y:62 }, { x:50, y:78 }];
 
 let DATA = null;
 
@@ -224,15 +255,31 @@ function draw() {
   const room = document.getElementById('room');
   [...room.querySelectorAll('.guy')].forEach(g => g.remove());
 
+  [...room.querySelectorAll('.desk')].forEach(d => d.remove());
+
   names.forEach((name, i) => {
     const mine = items.filter(t => (t.owners || []).includes(name)).sort(r0);
     const late = mine.filter(t => t.status === 'overdue').length;
     const soon = mine.filter(t => t.status === 'week' || t.status === 'overdue').length;
+    const seat = DESKS[i % DESKS.length];
 
+    /* метка на мониторе */
+    const d = document.createElement('div');
+    d.className = 'desk';
+    d.style.left = seat.pin.x + '%';
+    d.style.top  = seat.pin.y + '%';
+    d.innerHTML =
+      '<div class="pin' + (late ? ' hot' : '') + '"><span></span>' +
+      (mine.length ? mine.length : '') + '</div>' +
+      '<div class="who">' + esc(name) + '</div>' + card(name, mine);
+    room.appendChild(d);
+
+    /* человек рядом со своим столом */
     const el = document.createElement('div');
     el.className = 'guy';
-    el.style.left = SPOTS[i % SPOTS.length].x + '%';
-    el.style.top  = SPOTS[i % SPOTS.length].y + '%';
+    el.dataset.home = seat.stand.x + ',' + seat.stand.y;
+    el.style.left = seat.stand.x + '%';
+    el.style.top  = seat.stand.y + '%';
     el.innerHTML =
       card(name, mine) + figure(SHIRT[i % 6], HAIR[i % 6]) +
       '<div class="spot"></div>' +
@@ -274,22 +321,30 @@ function breathe() {
   setInterval(show, 30000);
 }
 
-/* кто-то время от времени переходит на другое место */
+/* кто-то отходит от стола и через полминуты возвращается */
 function wander() {
   if (window.__w) return;
   window.__w = setInterval(() => {
-    const guys = [...document.querySelectorAll('.guy')];
-    if (guys.length < 2) return;
+    const guys = [...document.querySelectorAll('.guy')].filter(g => !g.dataset.away);
+    if (!guys.length) return;
     const g = guys[Math.floor(Math.random() * guys.length)];
-    const free = SPOTS.filter(s =>
-      !guys.some(o => Math.abs(parseFloat(o.style.left) - s.x) < 3));
-    if (!free.length) return;
-    const to = free[Math.floor(Math.random() * free.length)];
-    g.classList.add('walk');
-    g.style.left = to.x + '%';
-    g.style.top  = to.y + '%';
-    setTimeout(() => g.classList.remove('walk'), 2700);
-  }, 9000);
+    const to = LOUNGE[Math.floor(Math.random() * LOUNGE.length)];
+    move(g, to.x, to.y);
+    g.dataset.away = 1;
+    setTimeout(() => {
+      const [hx, hy] = g.dataset.home.split(',');
+      move(g, +hx, +hy);
+      delete g.dataset.away;
+    }, 16000);
+  }, 11000);
+}
+
+function move(g, x, y) {
+  g.classList.add('walk');
+  g.style.left = x + '%';
+  g.style.top  = y + '%';
+  clearTimeout(g.__t);
+  g.__t = setTimeout(() => g.classList.remove('walk'), 2700);
 }
 
 function figure(shirt, hair) {
