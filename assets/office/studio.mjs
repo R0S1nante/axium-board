@@ -1,4 +1,6 @@
 /* Scene is independent of the existing board. Timezone never follows the viewer's device. */
+import {OfficeMotion} from './locomotion.mjs';
+import {AvatarRig} from './avatar-rig.mjs';
 export const TIME_ZONE = 'Asia/Almaty';
 export function localMinutes(date = new Date()) {
   const parts = new Intl.DateTimeFormat('en-GB', {timeZone: TIME_ZONE, hour: '2-digit', minute: '2-digit', hourCycle: 'h23'}).formatToParts(date);
@@ -39,7 +41,7 @@ function init() {
   let motion = !reducedMotion.matches && readSetting('axium-studio-motion', 'on') === 'on';
   let teamVisible = readSetting('axium-studio-team', 'on') === 'on';
   let data = null, connection = key ? 'loading' : 'unconnected', activePerson = null, lastFocus = null;
-  let activeMotion = false, motionTimer, returnTimer, walkTimer, travelerIndex = 0, loading = false;
+  let loading = false, animationFrame = null, previousFrame = null;
   const members = [
     {id:'dima', name:'Дима', color:'#8aabc7', x:38.5, y:51, size:13},
     {id:'darya', name:'Дарья', color:'#ce9b9b', x:65, y:51.5, size:13},
@@ -71,10 +73,18 @@ function init() {
     el.className='avatar';el.dataset.member=m.id;
     el.style.cssText=`--x:${m.x}%;--y:${m.y}%;--size:${m.size}%;--color:${m.color};--delay:${-i*.9}s;z-index:${Math.round(m.y)}`;
     el.setAttribute('aria-label',m.robot ? 'ИИ-помощник — открыть информацию' : m.name+' — открыть задачи');
-    const img=document.createElement('img');img.src=`assets/office/${m.id}.webp`;img.alt='';img.width=512;img.height=512;img.draggable=false;
-    const label=document.createElement('span');label.className='avatar-label';const dot=document.createElement('i');dot.setAttribute('aria-hidden','true');label.append(dot,document.createTextNode(m.name));el.append(img,label);
+    m.rig=new AvatarRig(el,`assets/office/${m.id}.webp`,m.robot?null:`assets/office/${m.id}-back.webp`,!!m.robot);
+    const label=document.createElement('span');label.className='avatar-label';const dot=document.createElement('i');dot.setAttribute('aria-hidden','true');label.append(dot,document.createTextNode(m.name));el.append(label);
     el.addEventListener('click',()=>showPerson(m));$('people').append(el);m.el=el;
   }
+  const locomotion=new OfficeMotion(members,(a,time)=>{
+    a.el.style.left=a.x+'%';a.el.style.top=a.y+'%';a.el.style.zIndex=Math.round(a.y*10);
+    a.el.style.setProperty('--size',(a.size*(1+(a.y-NUMBER_HOME_Y[a.id])*.004))+'%');
+    a.el.classList.toggle('walking',a.stride>.15);a.el.dataset.activity=a.path?'walking':'idle';
+    a.el.dataset.travel=String(Math.floor(a.travel));
+    a.rig.draw(a,time);
+  },(a,activity)=>{a.el.title=a.name+' · '+activity;});
+  const NUMBER_HOME_Y=Object.fromEntries(members.map(m=>[m.id,m.y]));
 
   function updateLight() {
     const now=new Date(), mins=localMinutes(now), light=lightingFor(mins,mode);
@@ -88,20 +98,10 @@ function init() {
   }
   document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.mode;saveSetting('axium-studio-light',mode);updateLight();$('announcement').textContent='Освещение: '+b.textContent.trim();}));
 
-  function home(m) { m.el.style.left=m.x+'%';m.el.style.top=m.y+'%';m.el.style.zIndex=Math.round(m.y); }
-  function stopMovement() {
-    clearTimeout(motionTimer);clearTimeout(returnTimer);clearTimeout(walkTimer);
-    members.forEach(m=>{m.el.classList.remove('walking');home(m);});
-  }
-  function scheduleWalk() { clearTimeout(motionTimer);if(activeMotion)motionTimer=setTimeout(walk,14000); }
-  function walk() {
-    if(!activeMotion || !$('panel').hidden) {scheduleWalk();return;}
-    const m=members[travelerIndex++ % members.length];
-    // Paths stay on the open center floor; furniture footprints are never crossed.
-    const destination=m.robot ? {x:58,y:66} : m.id==='ellina' ? {x:44,y:65} : m.id==='maxim' ? {x:72,y:70} : {x:m.x+4,y:61};
-    m.el.classList.add('walking');m.el.style.left=destination.x+'%';m.el.style.top=destination.y+'%';m.el.style.zIndex=Math.round(destination.y);
-    walkTimer=setTimeout(()=>m.el.classList.remove('walking'),4100);
-    returnTimer=setTimeout(()=>{if(!activeMotion)return;m.el.classList.add('walking');home(m);walkTimer=setTimeout(()=>{m.el.classList.remove('walking');scheduleWalk();},4100);},8500);
+  function frame(now){
+    if(previousFrame!==null)locomotion.frame((now-previousFrame)/1000);
+    $('people').dataset.motionTime=locomotion.clock.toFixed(2);
+    previousFrame=now;animationFrame=requestAnimationFrame(frame);
   }
   function updateMotion() {
     const animate=motion&&!reducedMotion.matches&&!document.hidden;
@@ -112,8 +112,10 @@ function init() {
     $('motionToggle').title=reducedMotion.matches?'В системе включено уменьшение движения':'';
     $('people').classList.toggle('off',!teamVisible);$('people').inert=!teamVisible;
     $('teamToggle').setAttribute('aria-pressed',String(teamVisible));$('teamCount').textContent=teamVisible?'4 + ИИ':'скрыта';
-    const shouldMove=animate&&teamVisible;
-    if(shouldMove!==activeMotion){activeMotion=shouldMove;stopMovement();if(activeMotion)scheduleWalk();}
+    const shouldMove=animate&&teamVisible&&$('panel').hidden;
+    locomotion.setRunning(shouldMove);
+    if(shouldMove&&animationFrame===null){previousFrame=null;animationFrame=requestAnimationFrame(frame);}
+    else if(!shouldMove&&animationFrame!==null){cancelAnimationFrame(animationFrame);animationFrame=null;previousFrame=null;}
   }
   $('motionToggle').addEventListener('click',()=>{motion=!motion;saveSetting('axium-studio-motion',motion?'on':'off');updateMotion();});
   $('teamToggle').addEventListener('click',()=>{teamVisible=!teamVisible;saveSetting('axium-studio-team',teamVisible?'on':'off');updateMotion();});
@@ -125,6 +127,7 @@ function init() {
   function openPanel(title,intro,eyebrow) {
     lastFocus=document.activeElement;$('panelTitle').textContent=title;$('panelIntro').textContent=intro;$('panelEyebrow').textContent=eyebrow;
     $('panelBody').replaceChildren();$('panel').hidden=false;$('scrim').hidden=false;document.querySelector('.app').inert=true;$('closePanel').focus();
+    updateMotion();
   }
   function showPerson(m) {
     activePerson=m;
@@ -152,7 +155,7 @@ function init() {
   document.querySelectorAll('[data-zone]').forEach(b=>b.addEventListener('click',()=>{
     activePerson=null;const z=zones[b.dataset.zone];openPanel(z.title,z.intro,'ПРОСТРАНСТВО СТУДИИ');const ul=document.createElement('ul');ul.className='zone-list';for(const text of z.items){const li=document.createElement('li');li.textContent=text;ul.append(li);}$('panelBody').append(ul);
   }));
-  function closePanel(){$('panel').hidden=true;$('scrim').hidden=true;document.querySelector('.app').inert=false;activePerson=null;if(lastFocus?.isConnected)lastFocus.focus();}
+  function closePanel(){$('panel').hidden=true;$('scrim').hidden=true;document.querySelector('.app').inert=false;activePerson=null;updateMotion();if(lastFocus?.isConnected)lastFocus.focus();}
   $('closePanel').addEventListener('click',closePanel);$('scrim').addEventListener('click',closePanel);
   document.addEventListener('keydown',event=>{
     if($('panel').hidden)return;
