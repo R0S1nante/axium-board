@@ -35,7 +35,7 @@
 
   /* ── правая панель ── */
   .panel{
-    position:absolute; left:2.4%; top:5%; bottom:5%; width:22%; z-index:5;
+    position:absolute; left:2.4%; top:5%; max-height:72%; width:22%; z-index:5;
     background:rgba(14,17,22,.72); backdrop-filter:blur(8px);
     border:1px solid rgba(255,255,255,.12); border-radius:14px;
     padding:14px; display:flex; flex-direction:column; gap:7px;
@@ -56,7 +56,7 @@
 
   /* ── люди ── */
   .guy{
-    position:absolute; z-index:4; width:3.4%;
+    position:absolute; z-index:4; width:4.3%;
     transition:left 2.6s cubic-bezier(.45,.05,.3,1);
     transform:translateX(-50%);
   }
@@ -95,7 +95,7 @@
 
   /* ── нижняя строка ── */
   .ticker{
-    position:absolute; right:2.4%; bottom:5%; z-index:5; display:flex; gap:10px;
+    position:absolute; left:2.4%; bottom:5%; z-index:5; display:flex; gap:10px;
     animation:fadeUp .8s both .6s;
   }
   .ticker div{
@@ -147,8 +147,8 @@ const HAIR  = ['#2b2420','#4a3426','#17161a','#6b4a2f','#2f2b45','#3a2b22'];
 /* точки на полу — проценты от ширины и высоты комнаты.
    Подгоняются под картинку office.png. */
 const SPOTS = [
-  { x:40, y:70 }, { x:51, y:82 }, { x:62, y:70 }, { x:72, y:82 },
-  { x:45, y:90 }, { x:68, y:56 }
+  { x:37, y:62 }, { x:50, y:76 }, { x:63, y:62 }, { x:72, y:78 },
+  { x:43, y:86 }, { x:66, y:50 }
 ];
 
 let DATA = null;
@@ -177,15 +177,16 @@ function draw() {
   document.getElementById('tWeek').textContent = week.length;
   document.getElementById('tPool').textContent = pool.length;
 
-  /* правая панель */
-  const show = week.slice().sort(r0).slice(0, 7);
+  /* панель: задачи недели, а если их нет — ближайшие по сроку */
+  const base = week.length ? week : items.slice().filter(x => x.due);
+  const show = base.slice().sort(r0).slice(0, 7);
   document.getElementById('rows').innerHTML = show.map((x, i) =>
     '<div class="row' + (x.status === 'overdue' ? ' hot' : '') + '" style="animation-delay:' +
     (0.6 + i * 0.12) + 's"><i style="background:' + (HEX[x.project] || '#9aa7b8') + '"></i>' +
     '<span><b>' + esc(cut(x.title, 46)) + '</b><small>' + esc(x.owner || 'ничья') + ' · ' +
     esc(x.project) + '</small></span></div>').join('');
   document.getElementById('more').textContent =
-    week.length > 7 ? 'и ещё ' + (week.length - 7) : '';
+    base.length > 7 ? 'и ещё ' + (base.length - 7) : '';
 
   /* люди */
   const names = [...new Set(DATA.items.flatMap(x => x.owners || []))].sort();
@@ -201,7 +202,8 @@ function draw() {
     el.style.left = used[i % used.length].x + '%';
     el.style.top  = used[i % used.length].y + '%';
     el.innerHTML =
-      '<div class="bubble"></div>' + figure(SHIRT[i % 6], HAIR[i % 6]) +
+      '<div class="bubble" style="bottom:' + (112 + (i % 2) * 46) + '%"></div>' +
+      figure(SHIRT[i % 6], HAIR[i % 6]) +
       '<div class="spot"></div><div class="tag">' + esc(name) + '</div>';
     room.appendChild(el);
     cycle(el, mine, i);
