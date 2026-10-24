@@ -43,10 +43,10 @@ function init() {
   let data = null, connection = key ? 'loading' : 'unconnected', activePerson = null, lastFocus = null;
   let loading = false, animationFrame = null, previousFrame = null;
   const members = [
-    {id:'dima', name:'Дима', color:'#8aabc7', x:38.5, y:51, size:13},
-    {id:'darya', name:'Дарья', color:'#ce9b9b', x:65, y:51.5, size:13},
-    {id:'ellina', name:'Эллина', color:'#b9c39e', x:29.5, y:65, size:13.5},
-    {id:'maxim', name:'Максим', color:'#e0bc7c', x:79.8, y:84, size:14.5},
+    {id:'dima', name:'Дима', color:'#8aabc7', x:38.5, y:51, size:15.5},
+    {id:'darya', name:'Дарья', color:'#ce9b9b', x:65, y:51.5, size:15.5},
+    {id:'ellina', name:'Эллина', color:'#b9c39e', x:29.5, y:65, size:16},
+    {id:'maxim', name:'Максим', color:'#e0bc7c', x:79.8, y:84, size:17},
     {id:'robot', name:'ИИ-помощник', color:'#9fc5d1', x:53, y:76, size:9, robot:true}
   ];
   $('boardLink').href = 'https://r0s1nante.github.io/axium-board/' + (key ? '?k=' + encodeURIComponent(key) : '');
@@ -79,12 +79,11 @@ function init() {
   }
   const locomotion=new OfficeMotion(members,(a,time)=>{
     a.el.style.left=a.x+'%';a.el.style.top=a.y+'%';a.el.style.zIndex=Math.round(a.y*10);
-    a.el.style.setProperty('--size',(a.size*(1+(a.y-NUMBER_HOME_Y[a.id])*.004))+'%');
+    a.el.style.setProperty('--size',a.size+'%');
     a.el.classList.toggle('walking',a.stride>.15);a.el.dataset.activity=a.path?'walking':'idle';
     a.el.dataset.travel=String(Math.floor(a.travel));
     a.rig.draw(a,time);
   },(a,activity)=>{a.el.title=a.name+' · '+activity;});
-  const NUMBER_HOME_Y=Object.fromEntries(members.map(m=>[m.id,m.y]));
 
   function updateLight() {
     const now=new Date(), mins=localMinutes(now), light=lightingFor(mins,mode);

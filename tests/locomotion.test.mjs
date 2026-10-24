@@ -31,3 +31,14 @@ test('limb deformation is continuous and reverses phase for alternate steps',()=
   const next=deformVertex(left,{...agent,phase:.001},0);assert.ok(Math.hypot(next.x-a.x,next.y-a.y)<.001);
   assert.ok(Number.isFinite(deformVertex({x:.5,y:.2},{...agent,stride:0},0).y));
 });
+test('turning preserves body width and the legs never cross',()=>{
+  const left={x:.35,y:.26},right={x:.65,y:.26};
+  for(const yaw of [0,Math.PI/2,Math.PI,-Math.PI/2]){
+    const idle={phase:0,stride:0,yaw,size:15.5};
+    assert.ok(Math.abs((deformVertex(right,idle,0).x-deformVertex(left,idle,0).x)-.3)<1e-10);
+    for(let phase=0;phase<Math.PI*2;phase+=.1){
+      const a={...idle,phase,stride:1};
+      assert.ok(deformVertex({x:.435,y:.89},a,0).x<deformVertex({x:.57,y:.89},a,0).x);
+    }
+  }
+});
