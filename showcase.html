@@ -8,173 +8,196 @@
 <style>
   *{box-sizing:border-box; margin:0; padding:0}
   body{
-    background:#0b0e12; overflow:hidden; height:100vh;
+    background:#080a0d; overflow:hidden; height:100vh;
     font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
     color:#fff; display:flex; align-items:center; justify-content:center;
   }
   .room{
     position:relative; width:min(100vw, calc(100vh * 16 / 9));
     aspect-ratio:16/9; overflow:hidden;
-    background:#cbb9a4 center/cover no-repeat; background-image:url('office.png');
+    background:#c8b9a4 center/cover no-repeat; background-image:url('office.png');
   }
-  .room::before{
-    content:''; position:absolute; inset:0; pointer-events:none; z-index:1;
+
+  /* ── атмосфера ── */
+  .vign{
+    position:absolute; inset:0; z-index:1; pointer-events:none;
     background:
-      linear-gradient(180deg, rgba(8,11,15,.55) 0%, rgba(8,11,15,0) 26%),
-      linear-gradient(0deg,  rgba(8,11,15,.6) 0%,  rgba(8,11,15,0) 24%);
+      linear-gradient(180deg, rgba(6,9,13,.52) 0%, rgba(6,9,13,0) 24%),
+      linear-gradient(0deg,  rgba(6,9,13,.58) 0%, rgba(6,9,13,0) 22%),
+      radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 52%, rgba(6,9,13,.34) 100%);
+  }
+  .sweep{
+    position:absolute; top:-20%; left:-40%; width:40%; height:150%; z-index:1;
+    pointer-events:none; transform:skewX(-22deg);
+    background:linear-gradient(90deg, rgba(255,240,205,0) 0%, rgba(255,240,205,.14) 50%, rgba(255,240,205,0) 100%);
+    animation:sweep 17s linear infinite;
+  }
+  .dust{position:absolute; inset:0; z-index:2; pointer-events:none; overflow:hidden}
+  .dust i{
+    position:absolute; width:3px; height:3px; border-radius:50%;
+    background:rgba(255,246,224,.75); filter:blur(.4px);
+    animation:float 19s linear infinite;
   }
 
   /* ── титул ── */
-  .brand{position:absolute; left:3.2%; top:6%; z-index:6; animation:in .9s both .15s}
+  .brand{position:absolute; left:3.2%; top:6%; z-index:8; animation:in .9s both .15s}
   .brand .live{
     display:inline-flex; align-items:center; gap:6px; font-size:.62em;
     letter-spacing:2.4px; text-transform:uppercase; color:#ffd43b; margin-bottom:4px;
   }
-  .brand .live i{
-    width:6px; height:6px; border-radius:50%; background:#ffd43b;
-    animation:pulse 1.9s ease-in-out infinite;
-  }
-  .brand h1{
-    font-size:3.1em; font-weight:800; letter-spacing:-1.5px; line-height:.92;
-    text-shadow:0 4px 24px rgba(0,0,0,.6), 0 1px 2px rgba(0,0,0,.5);
-  }
+  .brand .live i{width:6px; height:6px; border-radius:50%; background:#ffd43b;
+                 animation:pulse 1.9s ease-in-out infinite}
+  .brand h1{font-size:3em; font-weight:800; letter-spacing:-1.5px; line-height:.92;
+            text-shadow:0 4px 26px rgba(0,0,0,.65), 0 1px 2px rgba(0,0,0,.5)}
   .brand h1 em{font-style:normal; color:#ffd43b}
-  .brand p{
-    font-size:.76em; letter-spacing:3.4px; text-transform:uppercase;
-    opacity:.75; margin-top:7px; text-shadow:0 2px 10px rgba(0,0,0,.7);
-  }
-  .brand .line{width:54px; height:2px; background:#ffd43b; margin:11px 0 0; border-radius:2px}
+  .brand .line{width:54px; height:2px; background:#ffd43b; margin-top:11px; border-radius:2px}
+  .brand p{font-size:.74em; letter-spacing:3.2px; text-transform:uppercase;
+           opacity:.72; margin-top:9px; text-shadow:0 2px 10px rgba(0,0,0,.8)}
 
   /* ── счётчики ── */
-  .stats{
-    position:absolute; right:3.2%; top:7%; z-index:6; display:flex; gap:22px;
-    text-align:right; animation:in .9s both .35s;
-  }
-  .stats div{text-shadow:0 2px 12px rgba(0,0,0,.7)}
+  .stats{position:absolute; right:3.2%; top:7%; z-index:8; display:flex; gap:22px;
+         text-align:right; animation:in .9s both .35s}
+  .stats div{text-shadow:0 2px 14px rgba(0,0,0,.8)}
   .stats b{display:block; font-size:2em; font-weight:750; line-height:1}
-  .stats span{font-size:.64em; letter-spacing:1.6px; text-transform:uppercase; opacity:.7}
+  .stats span{font-size:.62em; letter-spacing:1.6px; text-transform:uppercase; opacity:.7}
   .stats .r b{color:#ff8a6b} .stats .y b{color:#ffd43b} .stats .g b{color:#7bdcb5}
 
-  /* ── нижняя выплывающая полка ── */
-  .dock{
-    position:absolute; left:50%; bottom:0; z-index:7; width:72%;
-    transform:translate(-50%, calc(100% - 2.4em));
-    transition:transform .55s cubic-bezier(.3,.8,.3,1);
-  }
+  /* ── нижняя полка ── */
+  .dock{position:absolute; left:50%; bottom:0; z-index:9; width:70%;
+        transform:translate(-50%, calc(100% - 2.4em));
+        transition:transform .55s cubic-bezier(.3,.8,.3,1)}
   .dock.open, .dock:hover{transform:translate(-50%, 0)}
-  .dock .handle{
-    margin:0 auto; width:max-content; cursor:default;
-    background:rgba(12,15,20,.82); backdrop-filter:blur(10px);
+  .dock .handle{margin:0 auto; width:max-content;
+    background:rgba(10,13,18,.84); backdrop-filter:blur(10px);
     border:1px solid rgba(255,255,255,.14); border-bottom:0;
     border-radius:12px 12px 0 0; padding:6px 20px 7px;
-    font-size:.7em; letter-spacing:1.6px; text-transform:uppercase;
-  }
+    font-size:.68em; letter-spacing:1.6px; text-transform:uppercase}
   .dock .handle b{color:#ffd43b; margin-left:7px}
   .dock .handle::after{content:' ▴'; opacity:.5}
   .dock.open .handle::after, .dock:hover .handle::after{content:' ▾'}
-  .dock .shelf{
-    display:flex; gap:9px; padding:12px; background:rgba(12,15,20,.82);
+  .dock .shelf{display:flex; gap:9px; padding:12px; background:rgba(10,13,18,.84);
     backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.14);
-    border-radius:14px 14px 0 0; margin-top:-1px;
-  }
-  .task{
-    flex:1 1 0; min-width:0; background:rgba(255,255,255,.07);
-    border-radius:10px; padding:9px 11px; border-left:3px solid #9aa7b8;
-  }
+    border-radius:14px 14px 0 0; margin-top:-1px}
+  .task{flex:1 1 0; min-width:0; background:rgba(255,255,255,.07);
+        border-radius:10px; padding:9px 11px; border-left:3px solid #9aa7b8}
   .task.late{background:rgba(222,53,11,.2); border-left-color:#ff6b45}
-  .task b{display:block; font-size:.74em; font-weight:500; line-height:1.3;
-          overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical}
-  .task small{display:block; font-size:.64em; opacity:.55; margin-top:4px}
+  .task b{font-size:.73em; font-weight:500; line-height:1.3; overflow:hidden;
+          display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical}
+  .task small{display:block; font-size:.63em; opacity:.55; margin-top:4px}
 
-  /* ── люди ── */
-  .guy{
-    position:absolute; z-index:4; width:4.6%; transform:translateX(-50%);
-    transition:left 2.6s cubic-bezier(.45,.05,.3,1), top 2.6s cubic-bezier(.45,.05,.3,1);
+  /* ── экран монитора ── */
+  .screen{
+    position:absolute; z-index:2; transform:translate(-50%,-50%);
+    width:5.4%; aspect-ratio:16/10; border-radius:3px; pointer-events:none;
+    background:linear-gradient(165deg,#5d8cff 0%,#2a52c9 55%,#17307a 100%);
+    opacity:.22; filter:blur(.6px);
+    transition:opacity .7s, box-shadow .7s;
+    box-shadow:0 0 14px rgba(90,140,255,.25);
   }
-  .guy:hover{z-index:9}
-  .guy svg{position:relative; width:100%; display:block;
-           filter:drop-shadow(0 7px 11px rgba(0,0,0,.4))}
-  .guy .spot{
-    position:absolute; left:50%; bottom:-5%; width:140%; height:15%;
-    transform:translateX(-50%); border-radius:50%;
-    background:rgba(255,212,59,.7); box-shadow:0 0 16px rgba(255,212,59,.55);
+  .screen.on{opacity:.9; box-shadow:0 0 26px 8px rgba(90,140,255,.45)}
+  .screen.on::before{
+    content:''; position:absolute; inset:12% 10%;
+    background:repeating-linear-gradient(180deg,
+      rgba(255,255,255,.5) 0 1px, rgba(255,255,255,0) 1px 4px);
+    opacity:.5; animation:scan 3.4s linear infinite;
   }
-  .guy.walk .leg-l{animation:step .46s linear infinite}
-  .guy.walk .leg-r{animation:step .46s linear infinite .23s}
-  .guy .torso{animation:idle 2.8s ease-in-out infinite}
-  .guy.walk .torso{animation:bob .46s ease-in-out infinite}
+  .screen.on::after{
+    content:''; position:absolute; inset:0; background:#cfe0ff; opacity:0;
+    animation:flick 6s steps(1) infinite;
+  }
+  .glow{
+    position:absolute; z-index:2; transform:translate(-50%,-50%);
+    width:13%; aspect-ratio:1; border-radius:50%; pointer-events:none;
+    background:radial-gradient(circle, rgba(120,160,255,.3) 0%, rgba(120,160,255,0) 68%);
+    opacity:0; transition:opacity .7s;
+  }
+  .glow.on{opacity:1}
 
-  .tag{
-    position:absolute; left:50%; top:101%; transform:translateX(-50%);
-    display:flex; align-items:center; gap:5px; white-space:nowrap;
-    background:rgba(12,15,20,.86); backdrop-filter:blur(6px);
-    border:1px solid rgba(255,255,255,.16); border-radius:999px;
-    padding:3px 10px; font-size:.62em; font-weight:600;
-  }
-  .tag u{text-decoration:none}
-  .tag i{
-    font-style:normal; background:#ffd43b; color:#1b1b1b; border-radius:999px;
-    min-width:15px; text-align:center; padding:0 4px; font-size:.9em;
-  }
-  .tag i.hot{background:#ff5630; color:#fff}
-
-  /* ── метка на рабочем месте ── */
-  .desk{position:absolute; z-index:5; transform:translate(-50%,-50%)}
-  .desk:hover{z-index:9}
-  .pin{
-    position:relative; display:flex; align-items:center; justify-content:center;
+  /* ── метка задач на столе ── */
+  .desk{position:absolute; z-index:6; transform:translate(-50%,-50%)}
+  .desk:hover{z-index:12}
+  .pin{position:relative; display:flex; align-items:center; justify-content:center;
     width:1.9em; height:1.9em; border-radius:50%; cursor:default;
-    background:#ffd43b; color:#1b1b1b; font-size:.66em; font-weight:750;
-    box-shadow:0 3px 10px rgba(0,0,0,.35);
-  }
+    background:#ffd43b; color:#17181b; font-size:.64em; font-weight:750;
+    box-shadow:0 3px 12px rgba(0,0,0,.45)}
   .pin.hot{background:#ff5630; color:#fff}
-  .pin span{
-    position:absolute; inset:0; border-radius:50%;
-    background:inherit; opacity:.55; animation:ping 2.4s ease-out infinite;
-  }
-  .desk .who{
-    position:absolute; left:50%; top:112%; transform:translateX(-50%);
-    white-space:nowrap; font-size:.6em; font-weight:600; letter-spacing:.4px;
-    text-shadow:0 1px 4px rgba(0,0,0,.8); opacity:.9;
-  }
-  .desk .card{bottom:auto; top:128%; transform:translateX(-50%) translateY(-8px)}
+  .pin span{position:absolute; inset:0; border-radius:50%; background:inherit;
+            opacity:.5; animation:ping 2.6s ease-out infinite}
+  .desk .who{position:absolute; left:50%; top:118%; transform:translateX(-50%);
+    white-space:nowrap; font-size:.58em; font-weight:600; letter-spacing:.4px;
+    text-shadow:0 1px 5px rgba(0,0,0,.9); opacity:.92}
+  .desk .card{bottom:auto; top:134%; transform:translateX(-50%) translateY(-8px)}
   .desk:hover .card{opacity:1; transform:translateX(-50%) translateY(0)}
   .desk .card::after{top:auto; bottom:100%; border-top-color:transparent;
                      border-bottom-color:rgba(255,255,255,.97)}
 
-  /* карточка задач человека — только при наведении */
-  .card{
-    position:absolute; left:50%; bottom:118%; transform:translateX(-50%) translateY(8px);
+  /* ── люди ── */
+  .guy{position:absolute; z-index:5; width:4.4%;
+       transform:translate(-50%,-100%);
+       transition:left 2.6s cubic-bezier(.45,.05,.3,1), top 2.6s cubic-bezier(.45,.05,.3,1),
+                  filter .3s, opacity .3s}
+  .guy:hover{z-index:12}
+  .guy svg{position:relative; width:100%; display:block;
+           filter:drop-shadow(0 8px 12px rgba(0,0,0,.42))}
+  .guy .shade{position:absolute; left:50%; bottom:-3%; width:135%; height:11%;
+    transform:translateX(-50%); border-radius:50%;
+    background:rgba(255,212,59,.6); box-shadow:0 0 18px rgba(255,212,59,.5)}
+  .guy.walk .leg-l{animation:step .46s linear infinite}
+  .guy.walk .leg-r{animation:step .46s linear infinite .23s}
+  .guy .torso{animation:breathe 3.6s ease-in-out infinite}
+  .guy.walk .torso{animation:bob .46s ease-in-out infinite}
+  .guy .eyes{animation:blink 5.2s infinite}
+  .guy.type .arm-l{animation:tap .34s ease-in-out infinite}
+  .guy.type .arm-r{animation:tap .34s ease-in-out infinite .17s}
+  .room.focus .guy:not(.sel), .room.focus .desk:not(.sel){opacity:.35}
+
+  .tag{position:absolute; left:50%; top:101%; transform:translateX(-50%);
+    white-space:nowrap; background:rgba(10,13,18,.86); backdrop-filter:blur(6px);
+    border:1px solid rgba(255,255,255,.16); border-radius:999px;
+    padding:3px 11px; font-size:.6em; font-weight:600}
+
+  .card{position:absolute; left:50%; bottom:118%; transform:translateX(-50%) translateY(8px);
     width:16.5vw; min-width:190px; max-width:280px;
     background:rgba(255,255,255,.97); color:#16202f; border-radius:13px;
-    box-shadow:0 14px 36px rgba(0,0,0,.4); padding:10px 11px;
-    opacity:0; pointer-events:none; transition:opacity .25s, transform .25s;
-  }
+    box-shadow:0 16px 40px rgba(0,0,0,.45); padding:10px 11px;
+    opacity:0; pointer-events:none; transition:opacity .25s, transform .25s}
   .guy:hover .card{opacity:1; transform:translateX(-50%) translateY(0)}
-  .card::after{
-    content:''; position:absolute; left:50%; top:100%; transform:translateX(-50%);
-    border:7px solid transparent; border-top-color:rgba(255,255,255,.97);
-  }
-  .card h3{font-size:.66em; letter-spacing:1.4px; text-transform:uppercase;
+  .card::after{content:''; position:absolute; left:50%; top:100%; transform:translateX(-50%);
+    border:7px solid transparent; border-top-color:rgba(255,255,255,.97)}
+  .card h3{font-size:.64em; letter-spacing:1.4px; text-transform:uppercase;
            color:#8b95a7; margin-bottom:7px}
   .card .it{display:flex; gap:7px; align-items:flex-start; padding:4px 0}
   .card .it + .it{border-top:1px solid #eef0f3}
   .card .it s{width:3px; align-self:stretch; border-radius:2px; text-decoration:none; flex:none}
-  .card .it b{font-size:.73em; font-weight:500; line-height:1.3; display:block}
-  .card .it small{font-size:.63em; color:#8b95a7}
+  .card .it b{font-size:.72em; font-weight:500; line-height:1.3; display:block}
+  .card .it small{font-size:.62em; color:#8b95a7}
   .card .it.late b{color:#b3310a}
-  .card .none{font-size:.72em; color:#8b95a7}
+  .card .none{font-size:.71em; color:#8b95a7}
 
   @keyframes step{0%{transform:rotate(17deg)}50%{transform:rotate(-17deg)}100%{transform:rotate(17deg)}}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.5%)}}
-  @keyframes idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-.5%)}}
+  @keyframes breathe{0%,100%{transform:translateY(0) scaleY(1)}50%{transform:translateY(-.4%) scaleY(1.012)}}
+  @keyframes tap{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+  @keyframes blink{0%,96%,100%{transform:scaleY(1)}98%{transform:scaleY(.08)}}
   @keyframes in{from{opacity:0; transform:translateY(-12px)}to{opacity:1; transform:none}}
   @keyframes pulse{0%,100%{opacity:1; transform:scale(1)}50%{opacity:.35; transform:scale(.8)}}
-  @keyframes ping{0%{transform:scale(1); opacity:.55}70%,100%{transform:scale(2.3); opacity:0}}
+  @keyframes ping{0%{transform:scale(1); opacity:.5}70%,100%{transform:scale(2.4); opacity:0}}
+  @keyframes scan{from{transform:translateY(0)}to{transform:translateY(8px)}}
+  @keyframes flick{0%,97%{opacity:0}98%{opacity:.16}99%{opacity:0}}
+  @keyframes sweep{from{transform:translateX(0) skewX(-22deg)}
+                   to{transform:translateX(370%) skewX(-22deg)}}
+  @keyframes float{
+    from{transform:translate(0,0); opacity:0}
+    10%{opacity:.8} 90%{opacity:.5}
+    to{transform:translate(60px,-220px); opacity:0}
+  }
 </style>
 </head>
 <body>
 <div class="room" id="room">
+  <div class="sweep"></div>
+  <div class="dust" id="dust"></div>
+  <div class="vign"></div>
 
   <div class="brand">
     <div class="live"><i></i>live</div>
@@ -193,7 +216,6 @@
     <div class="handle">сегодня в работе<b id="dockN">0</b></div>
     <div class="shelf" id="shelf"></div>
   </div>
-
 </div>
 
 <script>
@@ -203,20 +225,33 @@ const KEY = new URLSearchParams(location.search).get('k') || '';
 const HEX = { 'Призвание':'#8f7dff', 'Cosmica':'#ff6ea8', 'Racing Stars':'#ff7a4d', 'Общее':'#93a1b3' };
 const SHIRT = ['#4c6ef5','#12b886','#f59f00','#e8590c','#845ef7','#15aabf'];
 const HAIR  = ['#2b2420','#4a3426','#17161a','#6b4a2f','#2f2b45','#3a2b22'];
+const SKIN  = ['#f3d2b4','#e8c09a','#f6dcc2','#dbab84','#f1cdae','#e3bb95'];
 const MONTHS = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
 
-/* Рабочие места: pin — точка на мониторе, stand — где стоит человек.
-   Проценты от кадра. Подгоняются под office.png. */
+/* Рабочие места под office.png.
+   screen — центр монитора, stand — где стоят ноги человека. */
 const DESKS = [
-  { pin:{ x:15.5, y:29 }, stand:{ x:21, y:46 } },   /* стол слева, боком      */
-  { pin:{ x:38,   y:20 }, stand:{ x:37, y:40 } },   /* задний левый           */
-  { pin:{ x:60,   y:20 }, stand:{ x:61, y:40 } },   /* задний правый          */
-  { pin:{ x:21,   y:60 }, stand:{ x:33, y:72 } }    /* большой стол внизу     */
+  { screen:{ x:39,   y:18.5 }, stand:{ x:39, y:45 } },  /* задний левый  */
+  { screen:{ x:64.5, y:18   }, stand:{ x:64, y:45 } },  /* задний правый */
+  { screen:{ x:15,   y:38   }, stand:{ x:29, y:54 } },  /* слева верхний */
+  { screen:{ x:6.5,  y:61   }, stand:{ x:25, y:84 } }   /* слева нижний  */
 ];
-/* куда отходят от стола */
-const LOUNGE = [{ x:72, y:72 }, { x:64, y:62 }, { x:50, y:78 }];
+const LOUNGE = [{ x:78, y:62 }, { x:62, y:74 }, { x:48, y:80 }];
 
 let DATA = null;
+
+/* пылинки */
+(() => {
+  const d = document.getElementById('dust');
+  for (let i = 0; i < 14; i++) {
+    const s = document.createElement('i');
+    s.style.left = (10 + Math.random() * 80) + '%';
+    s.style.top = (40 + Math.random() * 55) + '%';
+    s.style.animationDelay = (-Math.random() * 19) + 's';
+    s.style.animationDuration = (14 + Math.random() * 12) + 's';
+    d.appendChild(s);
+  }
+})();
 
 async function load() {
   if (!KEY) { sub('нужен ключ в адресе: ?k=…'); return; }
@@ -240,7 +275,6 @@ function draw() {
   document.getElementById('tWeek').textContent = week.length;
   document.getElementById('tPool').textContent = pool.length;
 
-  /* нижняя полка */
   const base = (week.length ? week : items.filter(x => x.due)).slice().sort(r0);
   document.getElementById('dockN').textContent = base.length;
   document.getElementById('shelf').innerHTML = base.slice(0, 5).map(x =>
@@ -250,46 +284,62 @@ function draw() {
     esc(x.status === 'overdue' ? 'просрочено' : when(x)) + '</small></div>').join('')
     || '<div class="task"><b>Пока пусто</b><small>ни одной задачи на неделе</small></div>';
 
-  /* люди */
   const names = [...new Set(DATA.items.flatMap(x => x.owners || []))].sort();
   const room = document.getElementById('room');
-  [...room.querySelectorAll('.guy')].forEach(g => g.remove());
-
-  [...room.querySelectorAll('.desk')].forEach(d => d.remove());
+  room.querySelectorAll('.guy,.desk,.screen,.glow').forEach(n => n.remove());
 
   names.forEach((name, i) => {
     const mine = items.filter(t => (t.owners || []).includes(name)).sort(r0);
     const late = mine.filter(t => t.status === 'overdue').length;
-    const soon = mine.filter(t => t.status === 'week' || t.status === 'overdue').length;
     const seat = DESKS[i % DESKS.length];
+    const key = 'p' + i;
 
-    /* метка на мониторе */
+    /* свечение монитора */
+    const sc = document.createElement('div');
+    sc.className = 'screen on'; sc.dataset.k = key;
+    sc.style.left = seat.screen.x + '%'; sc.style.top = seat.screen.y + '%';
+    room.appendChild(sc);
+
+    const gl = document.createElement('div');
+    gl.className = 'glow on'; gl.dataset.k = key;
+    gl.style.left = seat.screen.x + '%'; gl.style.top = seat.screen.y + '%';
+    room.appendChild(gl);
+
+    /* метка с числом задач */
     const d = document.createElement('div');
-    d.className = 'desk';
-    d.style.left = seat.pin.x + '%';
-    d.style.top  = seat.pin.y + '%';
-    d.innerHTML =
-      '<div class="pin' + (late ? ' hot' : '') + '"><span></span>' +
-      (mine.length ? mine.length : '') + '</div>' +
-      '<div class="who">' + esc(name) + '</div>' + card(name, mine);
+    d.className = 'desk'; d.dataset.k = key;
+    d.style.left = seat.screen.x + '%';
+    d.style.top = (seat.screen.y + 7) + '%';
+    d.innerHTML = '<div class="pin' + (late ? ' hot' : '') + '"><span></span>' +
+      (mine.length || '') + '</div><div class="who">' + esc(name) + '</div>' + card(name, mine);
     room.appendChild(d);
 
-    /* человек рядом со своим столом */
+    /* человек */
     const el = document.createElement('div');
-    el.className = 'guy';
+    el.className = 'guy type'; el.dataset.k = key;
     el.dataset.home = seat.stand.x + ',' + seat.stand.y;
     el.style.left = seat.stand.x + '%';
     el.style.top  = seat.stand.y + '%';
-    el.innerHTML =
-      card(name, mine) + figure(SHIRT[i % 6], HAIR[i % 6]) +
-      '<div class="spot"></div>' +
-      '<div class="tag"><u>' + esc(name) + '</u>' +
-      (soon ? '<i class="' + (late ? 'hot' : '') + '">' + soon + '</i>' : '') + '</div>';
+    el.innerHTML = card(name, mine) + figure(i) +
+      '<div class="shade"></div><div class="tag">' + esc(name) + '</div>';
     room.appendChild(el);
+
+    [d, el].forEach(n => {
+      n.addEventListener('mouseenter', () => focus(key, true));
+      n.addEventListener('mouseleave', () => focus(key, false));
+    });
   });
 
   wander();
   breathe();
+}
+
+/* наведение: подсвечиваем пару человек + его монитор */
+function focus(key, on) {
+  const room = document.getElementById('room');
+  room.classList.toggle('focus', on);
+  room.querySelectorAll('[data-k]').forEach(n =>
+    n.classList.toggle('sel', on && n.dataset.k === key));
 }
 
 function card(name, tasks) {
@@ -308,20 +358,16 @@ const r0 = (a, b) => rank(a) - rank(b) || ((a.due || '9').localeCompare(b.due ||
 const rank = x => x.status === 'overdue' ? 0 : x.status === 'week' ? 1 : x.status === 'noDate' ? 3 : 2;
 const when = x => x.due ? (+x.due.slice(8, 10)) + ' ' + MONTHS[+x.due.slice(5, 7) - 1] : 'без срока';
 
-/* полка сама выезжает раз в полминуты и прячется */
 function breathe() {
   const d = document.getElementById('dock');
   if (d.dataset.on) return;
   d.dataset.on = 1;
-  const show = () => {
-    d.classList.add('open');
-    setTimeout(() => d.classList.remove('open'), 7000);
-  };
+  const show = () => { d.classList.add('open'); setTimeout(() => d.classList.remove('open'), 7000); };
   setTimeout(show, 2500);
   setInterval(show, 30000);
 }
 
-/* кто-то отходит от стола и через полминуты возвращается */
+/* отходит от стола — монитор засыпает; вернулся — просыпается */
 function wander() {
   if (window.__w) return;
   window.__w = setInterval(() => {
@@ -329,14 +375,22 @@ function wander() {
     if (!guys.length) return;
     const g = guys[Math.floor(Math.random() * guys.length)];
     const to = LOUNGE[Math.floor(Math.random() * LOUNGE.length)];
-    move(g, to.x, to.y);
     g.dataset.away = 1;
+    g.classList.remove('type');
+    screens(g.dataset.k, false);
+    move(g, to.x, to.y);
     setTimeout(() => {
       const [hx, hy] = g.dataset.home.split(',');
       move(g, +hx, +hy);
+      setTimeout(() => { g.classList.add('type'); screens(g.dataset.k, true); }, 2600);
       delete g.dataset.away;
-    }, 16000);
-  }, 11000);
+    }, 15000);
+  }, 12000);
+}
+
+function screens(key, on) {
+  document.querySelectorAll('.screen[data-k="' + key + '"], .glow[data-k="' + key + '"]')
+    .forEach(n => n.classList.toggle('on', on));
 }
 
 function move(g, x, y) {
@@ -347,19 +401,31 @@ function move(g, x, y) {
   g.__t = setTimeout(() => g.classList.remove('walk'), 2700);
 }
 
-function figure(shirt, hair) {
-  return '<svg viewBox="0 0 40 96">' +
+function figure(i) {
+  const shirt = SHIRT[i % 6], hair = HAIR[i % 6], skin = SKIN[i % 6];
+  return '<svg viewBox="0 0 44 104">' +
     '<g class="torso">' +
-      '<circle cx="20" cy="17" r="11" fill="#f3d2b4"/>' +
-      '<path d="M9 13 q11 -11 22 0 q-11 -4 -22 0z" fill="' + hair + '"/>' +
-      '<rect x="8" y="27" width="24" height="33" rx="10" fill="' + shirt + '"/>' +
-      '<rect x="4"  y="30" width="6" height="24" rx="3" fill="' + shirt + '"/>' +
-      '<rect x="30" y="30" width="6" height="24" rx="3" fill="' + shirt + '"/>' +
+      '<circle cx="22" cy="18" r="11.5" fill="' + skin + '"/>' +
+      '<path d="M10.5 15 q11.5 -12 23 0 q-4 -5 -11.5 -5 q-7.5 0 -11.5 5z" fill="' + hair + '"/>' +
+      '<g class="eyes" style="transform-origin:22px 19px">' +
+        '<circle cx="18.4" cy="19" r="1.5" fill="#2b2420"/>' +
+        '<circle cx="25.6" cy="19" r="1.5" fill="#2b2420"/>' +
+      '</g>' +
+      '<rect x="9" y="29" width="26" height="35" rx="10" fill="' + shirt + '"/>' +
+      '<path d="M18 29 h8 l-4 6z" fill="rgba(255,255,255,.22)"/>' +
+      '<g class="arm-l" style="transform-origin:10px 33px">' +
+        '<rect x="4" y="32" width="6.5" height="25" rx="3.2" fill="' + shirt + '"/>' +
+        '<circle cx="7.2" cy="58" r="3.4" fill="' + skin + '"/></g>' +
+      '<g class="arm-r" style="transform-origin:34px 33px">' +
+        '<rect x="33.5" y="32" width="6.5" height="25" rx="3.2" fill="' + shirt + '"/>' +
+        '<circle cx="36.8" cy="58" r="3.4" fill="' + skin + '"/></g>' +
     '</g>' +
-    '<g class="leg-l" style="transform-origin:16px 58px">' +
-      '<rect x="12" y="58" width="7" height="32" rx="3.5" fill="#2f3b52"/></g>' +
-    '<g class="leg-r" style="transform-origin:24px 58px">' +
-      '<rect x="21" y="58" width="7" height="32" rx="3.5" fill="#2f3b52"/></g>' +
+    '<g class="leg-l" style="transform-origin:17px 62px">' +
+      '<rect x="13" y="62" width="7.5" height="33" rx="3.5" fill="#2f3b52"/>' +
+      '<rect x="11.6" y="93" width="9.5" height="5" rx="2.4" fill="#1e2735"/></g>' +
+    '<g class="leg-r" style="transform-origin:27px 62px">' +
+      '<rect x="23.5" y="62" width="7.5" height="33" rx="3.5" fill="#2f3b52"/>' +
+      '<rect x="22.9" y="93" width="9.5" height="5" rx="2.4" fill="#1e2735"/></g>' +
     '</svg>';
 }
 
