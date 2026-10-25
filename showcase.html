@@ -25,6 +25,67 @@ Source project: https://github.com/R0S1nante/axium-board/pull/1 -->
 .scene:fullscreen{width:min(100vw,calc(100vh * 1678 / 936));height:auto;aspect-ratio:1678/936;margin:auto}
 .scene::backdrop{background:#0d1c17}
 
+/* ── проекты на пробковой доске ── */
+.projects{position:absolute;left:3.5%;top:15.5%;width:12.6%;z-index:3;display:grid;gap:5%;
+  transform:skewY(7deg) rotate(-.6deg);transform-origin:left top;pointer-events:none;
+  filter:brightness(calc(1 - var(--night) * .22))}
+.pcard{background:#fffdf2;border-radius:3px;padding:7% 9%;box-shadow:0 2px 7px #0005;
+  border-left:4px solid var(--pc,#9aa88a);color:#2a3327;font-size:clamp(5px,.58vw,10px);line-height:1.3}
+.pcard b{display:block;font-weight:700;letter-spacing:-.2px;font-size:1.12em}
+.pcard span{display:block;color:#6d7a66;margin-top:2px}
+.pcard i{float:right;font-style:normal;font-weight:750;color:#8a6b2f}
+
+/* ── подсветка фигур ночью ── */
+.avatar img{filter:drop-shadow(0 0 calc(var(--night) * 9px) rgba(150,200,255,.5))}
+
+/* ── лента задач ── */
+.feed{display:none}
+.feed h3{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin:0 0 9px;font-weight:650}
+.feed .row{display:block;text-decoration:none;background:#ffffff10;border:1px solid var(--line);
+  border-left:3px solid var(--c,#9aa88a);border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:12px;line-height:1.35}
+.feed .row.late{background:#c0523512;border-left-color:#d4785c}
+.feed .row small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
+body.vertical .feed{display:block;margin-top:12px}
+body.shoot:not(.vertical) .feed{display:block;position:absolute;right:16px;top:16px;bottom:58px;width:25%;
+  overflow:hidden;background:#0e1f1ad9;backdrop-filter:blur(9px);border:1px solid var(--line);
+  border-radius:11px;padding:14px;z-index:5}
+
+/* ── события ── */
+.toasts{position:absolute;left:16px;bottom:54px;z-index:6;display:grid;gap:7px;pointer-events:none}
+.toast{background:#17302aeb;border:1px solid #ffffff2b;border-left:3px solid var(--gold);
+  border-radius:8px;padding:8px 12px;font-size:11px;animation:toastIn .45s both;max-width:300px}
+.toast b{display:block;color:var(--gold);font-size:9px;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:2px}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ── вертикальный режим 9:16 ── */
+body.vertical .app{max-width:min(100vw, calc(100vh * 9 / 16));padding:18px 14px 8px}
+body.vertical .header{gap:14px;margin-bottom:14px}
+body.vertical .wordmark{font-size:26px}
+body.vertical .heading{border:0;padding:0}
+body.vertical h1{font-size:12px}
+body.vertical .kpi,body.vertical .footnote,body.vertical .under-scene{display:none}
+body.vertical .controls{padding:12px 0;gap:10px;flex-wrap:wrap}
+body.vertical .scene{aspect-ratio:1678/936}
+body.vertical .app{height:100vh;display:flex;flex-direction:column}
+body.vertical .office{flex:1;min-height:0;display:flex;flex-direction:column}
+body.vertical .office .scene{flex:none}
+body.vertical .projects,body.vertical .hotspot,body.vertical .scene-caption,body.vertical .expand{display:none}
+body.vertical .feed{flex:1;min-height:0;display:flex;flex-direction:column;margin-top:14px}
+body.vertical #feedBody{flex:1;min-height:0;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 86%,transparent);mask-image:linear-gradient(180deg,#000 86%,transparent)}
+body.vertical .toasts{bottom:10px;left:10px}
+.pchips{display:none;gap:6px;flex-wrap:wrap;margin-top:12px}
+body.vertical .pchips{display:flex}
+.pchip{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;
+  padding:5px 11px;font-size:11px;background:#ffffff0a}
+.pchip i{width:6px;height:6px;border-radius:50%;background:var(--pc,#9aa88a)}
+.pchip b{font-weight:700;color:var(--gold)}
+body.shoot .control-title,body.shoot .segmented,body.shoot .footnote,body.shoot .under-scene{display:none}
+body.shoot .controls{border:0;padding:8px 0;opacity:.3;transition:opacity .3s}
+body.shoot:not(.vertical) .app{height:100vh;display:flex;flex-direction:column;justify-content:center;padding:12px 24px}
+body.shoot:not(.vertical) .office{width:fit-content;margin:0 auto}
+body.shoot:not(.vertical) .scene{height:min(calc(100vh - 150px), calc((100vw - 48px) * 936 / 1678));width:auto;margin:0 auto}
+body.shoot .controls:hover{opacity:1}
+
 </style>
   
 </head>
@@ -70,11 +131,15 @@ Source project: https://github.com/R0S1nante/axium-board/pull/1 -->
       </svg>
       <div class="room-shade" aria-hidden="true"></div>
       <div class="people" id="people"></div>
+      <div class="projects" id="projects"></div>
+      <div class="toasts" id="toasts"></div>
       <button class="hotspot coffee" data-zone="coffee" aria-label="Открыть зону кофе"><span class="zone-dot"></span><span>Кофе & идеи</span><span class="plus">+</span></button>
       <button class="hotspot gear" data-zone="gear" aria-label="Открыть зону съёмок"><span class="zone-dot"></span><span>Зона съёмок</span><span class="plus">+</span></button>
       <div class="scene-caption"><span class="small-dot"></span><span id="sceneCaption">Студия в своём ритме</span></div>
       <button class="expand" id="fullscreen" aria-label="Открыть офис на весь экран" title="На весь экран">⛶</button>
     </div>
+    <div class="pchips" id="pchips"></div>
+    <div class="feed" id="feed"><h3>Сегодня в работе</h3><div id="feedBody"></div></div>
     <div class="under-scene"><span><span class="status-dot"></span><span id="connection">Сцена без подключения задач</span></span><span>Нажмите на персонажа, чтобы открыть задачи</span></div>
   </section>
 
@@ -83,7 +148,7 @@ Source project: https://github.com/R0S1nante/axium-board/pull/1 -->
     <div class="segmented" role="group" aria-label="Освещение офиса">
       <button data-mode="auto" aria-pressed="true">Авто</button><button data-mode="day" aria-pressed="false"><span aria-hidden="true">☀</span> День</button><button data-mode="evening" aria-pressed="false"><span aria-hidden="true">◒</span> Вечер</button><button data-mode="night" aria-pressed="false"><span aria-hidden="true">☾</span> Ночь</button>
     </div>
-    <div class="view-controls"><button class="icon-control" id="teamToggle" aria-pressed="true">Команда <span id="teamCount">4 + ИИ</span></button><button class="icon-control" id="motionToggle" aria-pressed="true">Анимация <span id="motionState">вкл.</span></button></div>
+    <div class="view-controls"><button class="icon-control" id="shootToggle" aria-pressed="false">Съёмка <span id="shootState">выкл.</span></button><button class="icon-control" id="vertToggle" aria-pressed="false">9:16 <span id="vertState">выкл.</span></button><button class="icon-control" id="teamToggle" aria-pressed="true">Команда <span id="teamCount">4 + ИИ</span></button><button class="icon-control" id="motionToggle" aria-pressed="true">Анимация <span id="motionState">вкл.</span></button></div>
   </footer>
   <p class="footnote">Рабочие места · кофе · контент · команда</p>
 </main>
@@ -193,7 +258,8 @@ function init() {
     clearTimeout(motionTimer);clearTimeout(returnTimer);clearTimeout(walkTimer);
     members.forEach(m=>{m.el.classList.remove('walking');home(m);});
   }
-  function scheduleWalk() { clearTimeout(motionTimer);if(activeMotion)motionTimer=setTimeout(walk,14000); }
+  let walkDelay=14000;
+  function scheduleWalk() { clearTimeout(motionTimer);if(activeMotion)motionTimer=setTimeout(walk,walkDelay); }
   function walk() {
     if(!activeMotion || !$('panel').hidden) {scheduleWalk();return;}
     const m=members[travelerIndex++ % members.length];
@@ -221,6 +287,105 @@ function init() {
   document.addEventListener('visibilitychange',()=>{updateLight();updateMotion();});
   $('fullscreen').addEventListener('click',async()=>{try {if(document.fullscreenElement)await document.exitFullscreen();else await $('scene').requestFullscreen();}catch {$('announcement').textContent='Полноэкранный режим недоступен в этом браузере';}});
   if(!document.fullscreenEnabled) $('fullscreen').hidden=true;
+
+
+  // ── цвета проектов ──
+  const PROJ={'Призвание':'#9b8cff','Cosmica':'#e58fae','Racing Stars':'#e0a06a','Общее':'#9aa88a'};
+  const MON=['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек'];
+  const dueShort=t=>t.due?(+String(t.due).slice(8,10))+' '+MON[+String(t.due).slice(5,7)-1]:'без срока';
+  const byUrg=(a,b)=>((a.status==='overdue'?0:1)-(b.status==='overdue'?0:1))||String(a.due||'9').localeCompare(String(b.due||'9'));
+
+  function renderProjects(){
+    const box=$('projects'), chips=$('pchips'); if(!box||!chips) return;
+    chips.replaceChildren();
+    if(!data){box.replaceChildren();return;}
+    const live=data.items.filter(t=>t.status!=='waiting'&&t.status!=='done');
+    const order=['Призвание','Cosmica','Racing Stars'];
+    box.replaceChildren();
+    for(const name of order){
+      const mine=live.filter(t=>t.project===name).sort(byUrg);
+      if(!mine.length) continue;
+      const late=mine.filter(t=>t.status==='overdue').length;
+      const el=document.createElement('div'); el.className='pcard';
+      el.style.setProperty('--pc',PROJ[name]||'#9aa88a');
+      el.innerHTML='<i>'+mine.length+'</i><b>'+name+'</b><span>'+
+        (late?late+' просрочено · ':'')+'ближайшее '+dueShort(mine[0])+'</span>';
+      box.append(el);
+      const chip=document.createElement('div'); chip.className='pchip';
+      chip.style.setProperty('--pc',PROJ[name]||'#9aa88a');
+      chip.innerHTML='<i></i><span></span><b></b>';
+      chip.querySelector('span').textContent=name;
+      chip.querySelector('b').textContent=mine.length;
+      chips.append(chip);
+    }
+  }
+
+  function renderFeed(){
+    const box=$('feedBody'); if(!box) return;
+    box.replaceChildren();
+    if(!data){const d=document.createElement('div');d.className='row';d.textContent='Задачи не подключены';box.append(d);return;}
+    const live=data.items.filter(t=>t.status==='week'||t.status==='overdue').sort(byUrg).slice(0,8);
+    if(!live.length){const d=document.createElement('div');d.className='row';d.textContent='На ближайшую неделю пусто';box.append(d);return;}
+    for(const t of live){
+      const url=safeTaskUrl(t.url);
+      const el=document.createElement(url?'a':'div');
+      el.className='row'+(t.status==='overdue'?' late':'');
+      if(url){el.href=url;el.target='_blank';el.rel='noopener noreferrer';}
+      el.style.setProperty('--c',PROJ[t.project]||'#9aa88a');
+      const b=document.createElement('div'); b.textContent=t.title||'Задача';
+      const sm=document.createElement('small');
+      sm.textContent=[t.owner||'ничья',t.project,t.status==='overdue'?'просрочено':dueShort(t)].filter(Boolean).join(' · ');
+      el.append(b,sm); box.append(el);
+    }
+  }
+
+  // ── события: сравниваем прошлую и новую загрузку ──
+  let snapshot=null;
+  function diffEvents(next){
+    const now=new Map(next.items.map(t=>[t.id,t]));
+    if(!snapshot){snapshot=now;return [];}
+    const out=[];
+    for(const [id,t] of now) if(!snapshot.has(id)) out.push(['Новая задача',t.title]);
+    for(const [id,t] of snapshot) if(!now.has(id)) out.push(['Закрыто',t.title]);
+    for(const [id,t] of now){const was=snapshot.get(id);
+      if(was&&was.status!=='overdue'&&t.status==='overdue') out.push(['Просрочено',t.title]);}
+    snapshot=now; return out.slice(0,3);
+  }
+  function toast(kind,text){
+    const box=$('toasts'); if(!box) return;
+    const el=document.createElement('div'); el.className='toast';
+    el.innerHTML='<b></b><span></span>';
+    el.querySelector('b').textContent=kind; el.querySelector('span').textContent=text||'';
+    box.append(el);
+    setTimeout(()=>{el.style.transition='opacity .4s';el.style.opacity='0';setTimeout(()=>el.remove(),450);},7000);
+  }
+
+  // ── режимы съёмки и 9:16 ──
+  let shoot=readSetting('axium-studio-shoot','off')==='on';
+  let vertical=readSetting('axium-studio-vertical','off')==='on';
+  let modeBeforeShoot=null;
+  function applyModes(){
+    document.body.classList.toggle('shoot',shoot);
+    document.body.classList.toggle('vertical',vertical);
+    $('shootToggle').setAttribute('aria-pressed',String(shoot));
+    $('shootState').textContent=shoot?'вкл.':'выкл.';
+    $('vertToggle').setAttribute('aria-pressed',String(vertical));
+    $('vertState').textContent=vertical?'вкл.':'выкл.';
+    walkDelay=shoot?4000:14000;
+    const mx=members.find(m=>m.id==='maxim');
+    if(mx){mx.x=shoot?62:80; if(!mx.el.classList.contains('walking')) home(mx);}
+    clearTimeout(motionTimer); if(activeMotion) scheduleWalk();
+    renderFeed();
+  }
+  $('shootToggle').addEventListener('click',()=>{
+    shoot=!shoot; saveSetting('axium-studio-shoot',shoot?'on':'off');
+    if(shoot){modeBeforeShoot=mode;mode='night';}
+    else if(modeBeforeShoot){mode=modeBeforeShoot;modeBeforeShoot=null;}
+    saveSetting('axium-studio-light',mode); updateLight(); applyModes();
+  });
+  $('vertToggle').addEventListener('click',()=>{
+    vertical=!vertical; saveSetting('axium-studio-vertical',vertical?'on':'off'); applyModes();
+  });
 
   function openPanel(title,intro,eyebrow) {
     lastFocus=document.activeElement;$('panelTitle').textContent=title;$('panelIntro').textContent=intro;$('panelEyebrow').textContent=eyebrow;
@@ -272,6 +437,8 @@ function init() {
       $('kWeek').textContent=live.filter(t=>t.status==='week'||t.status==='overdue').length;
       $('kPool').textContent=live.filter(t=>t.status==='noDate'||t.status==='later').length;
       $('kpi').hidden=false;
+      for(const [kind,text] of diffEvents(next)) toast(kind,text);
+      renderProjects(); renderFeed();
       for(const m of members){if(m.robot)continue;const c=tasksFor(data.items,m.match||m.name).length;
         const lab=m.el.querySelector('.avatar-label');
         if(lab&&!lab.querySelector('u')){const u=document.createElement('u');u.className='cnt';lab.append(u);}
@@ -281,7 +448,7 @@ function init() {
   }
   if(key)$('connection').textContent='Подключаем задачи…';
   $('roomImage').addEventListener('error',()=>{$('connection').textContent='Не удалось загрузить изображение офиса. Обновите страницу.';});
-  updateLight();updateMotion();loadTasks();
+  updateLight();updateMotion();applyModes();loadTasks();
   setInterval(updateLight,15000);
   setInterval(()=>{if(!document.hidden)loadTasks();},300000);
 }
