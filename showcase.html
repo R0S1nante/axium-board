@@ -208,7 +208,7 @@ function init() {
   const members = [
     {id:'dima', name:'Дима', match:['Дмитрий','Дима'], color:'#8aabc7', x:38.5, y:52, size:17},
     {id:'darya', name:'Дарья', match:['Дарья','Даша'], color:'#ce9b9b', x:65, y:52.5, size:17},
-    {id:'ellina', name:'Эллина', match:['Элина','Эллина'], color:'#b9c39e', x:29, y:66, size:18},
+    {id:'ellina', name:'Элина', match:['Элина','Эллина'], color:'#b9c39e', x:29, y:66, size:18},
     {id:'maxim', name:'Максим', match:['Максим'], color:'#e0bc7c', x:80, y:85, size:19.5},
     {id:'robot', name:'ИИ-помощник', color:'#9fc5d1', x:53, y:77, size:12, robot:true}
   ];
@@ -430,7 +430,9 @@ function init() {
     try {
       const response=await fetch(API_URL+'?k='+encodeURIComponent(key),{signal:controller.signal,referrerPolicy:'no-referrer'});
       if(!response.ok)throw new Error('HTTP '+response.status);
-      const next=await response.json();if(next.error||!Array.isArray(next.items))throw new Error('Invalid board response');
+      const next=await response.json();
+      if(next&&next.error){connection='denied';$('connection').textContent='Ключ не подошёл · проверьте ?k= в адресе';return;}
+      if(!Array.isArray(next.items))throw new Error('Invalid board response');
       data=next;connection='connected';$('connection').textContent='Задачи подключены · обновление каждые 5 минут';
       const live=data.items.filter(t=>t.status!=='waiting');
       $('kHot').textContent=live.filter(t=>t.urgent||t.status==='overdue'||!(t.owners||[]).length).length;
@@ -443,7 +445,11 @@ function init() {
         const lab=m.el.querySelector('.avatar-label');
         if(lab&&!lab.querySelector('u')){const u=document.createElement('u');u.className='cnt';lab.append(u);}
         const u=lab&&lab.querySelector('u');if(u)u.textContent=c?String(c):'';}
-    }catch{connection='error';$('connection').textContent=data?'Не удалось обновить · показаны последние задачи':'Нет связи с доской · офис работает';}
+    }catch(err){connection='error';
+      const why=String(err&&err.message||err);
+      const hint=location.protocol==='file:'?'страница открыта как файл — нужен адрес на github.io'
+        :why.includes('HTTP')?why:'сервер не ответил';
+      $('connection').textContent=data?'Не удалось обновить · показаны последние задачи':'Нет связи с доской · '+hint;}
     finally{clearTimeout(timeout);loading=false;if(activePerson)renderPersonTasks(activePerson);}
   }
   if(key)$('connection').textContent='Подключаем задачи…';
