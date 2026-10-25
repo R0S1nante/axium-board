@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#142622">
+  <title>Axium · Живой офис</title>
+  <meta name="description" content="Виртуальная SMM-студия Axium: команда, рабочие места, кофе и мягкая смена дня и ночи.">
+  <link rel="stylesheet" href="assets/office/studio.css">
+  <link rel="preload" as="image" href="assets/office/studio-day.webp">
+</head>
+<body>
+<main class="app">
+  <header class="header">
+    <a class="wordmark" id="boardLink" href="index.html" aria-label="Axium — перейти к доске задач">axium<span>®</span></a>
+    <div class="heading"><span class="eyebrow">SMM AGENCY</span><h1>Место, где рождаются идеи.</h1></div>
+    <div class="clock-box"><span class="live-dot" aria-hidden="true"></span><span id="phase">Живой офис</span><span class="clock" id="clock">--:--</span><small>Алматы · UTC+5</small></div>
+  </header>
+
+  <section class="office" aria-label="Анимированный офис команды Axium">
+    <div class="scene" id="scene">
+      <img class="room-image" id="roomImage" src="assets/office/studio-day.webp" alt="Светлая SMM-студия: четыре рабочих места, кофейная станция справа и съёмочное оборудование слева" width="1678" height="936" fetchpriority="high">
+      <svg class="atmosphere" viewBox="0 0 1678 936" aria-hidden="true">
+        <defs>
+          <linearGradient id="skyGradient" x2="0" y2="1"><stop stop-color="#152440"/><stop offset="1" stop-color="#5b5b79"/></linearGradient>
+          <linearGradient id="screenGradient" x2="1" y2="1"><stop stop-color="#83b8c7"/><stop offset="1" stop-color="#284c69"/></linearGradient>
+          <radialGradient id="warmLight"><stop stop-color="#ffcb7a" stop-opacity=".7"/><stop offset="1" stop-color="#ffcb7a" stop-opacity="0"/></radialGradient>
+          <radialGradient id="screenGlow"><stop stop-color="#83c9ff" stop-opacity=".24"/><stop offset="1" stop-color="#83c9ff" stop-opacity="0"/></radialGradient>
+          <clipPath id="windowPanes"><path id="panes"/></clipPath>
+          <mask id="windowMask"><rect width="1678" height="936" fill="white"/><rect x="587" y="130" width="142" height="90" rx="3" fill="black"/><rect x="1022" y="130" width="142" height="90" rx="3" fill="black"/></mask>
+          <clipPath id="monitorClip"><path d="M592 137H721V206H592Z M1029 137H1158V206H1029Z M220 343L255 293L251 381L223 419Z M1652 542L1678 565V694L1635 643Z"/></clipPath>
+        </defs>
+        <g class="sky" clip-path="url(#windowPanes)" mask="url(#windowMask)">
+          <rect width="1678" height="190" fill="url(#skyGradient)"/>
+          <g class="stars" fill="#f7f2de"><circle cx="466" cy="33" r="1.5"/><circle cx="601" cy="57" r="1"/><circle cx="777" cy="20" r="1.3"/><circle cx="913" cy="49" r="1.5"/><circle cx="992" cy="118" r="1"/><circle cx="1177" cy="34" r="1"/><circle cx="1320" cy="121" r="1.4"/><circle cx="1222" cy="80" r="1.2"/><circle cx="844" cy="139" r="1"/></g>
+          <path class="moon" d="M1268 28A16 16 0 1 0 1289 48A18 18 0 0 1 1268 28" fill="#f7edcd"/>
+          <g class="clouds" fill="none" stroke="#fff" stroke-opacity=".09" stroke-width="10" stroke-linecap="round"><path d="M470 115h100m230-70h100m230 84h130"/></g>
+        </g>
+        <g class="lamplight"><ellipse cx="652" cy="280" rx="160" ry="97" fill="url(#warmLight)"/><ellipse cx="1090" cy="280" rx="160" ry="97" fill="url(#warmLight)"/><ellipse cx="1545" cy="395" rx="170" ry="180" fill="url(#warmLight)"/></g>
+        <g class="monitors" clip-path="url(#monitorClip)">
+          <rect x="180" y="120" width="1500" height="600" fill="url(#screenGradient)"/>
+          <g class="monitor-ui" stroke="#d1e6e9" stroke-opacity=".45" fill="#cee4e9" fill-opacity=".25">
+            <path d="M604 151h105M1041 151h105"/><rect x="604" y="161" width="29" height="32" rx="2"/><rect x="639" y="161" width="70" height="5" rx="2"/><rect x="639" y="172" width="52" height="4" rx="2"/><rect x="639" y="183" width="62" height="4" rx="2"/>
+            <rect x="1041" y="162" width="31" height="31" rx="2"/><rect x="1079" y="162" width="31" height="31" rx="2"/><rect x="1117" y="162" width="29" height="31" rx="2"/>
+          </g>
+          <rect class="screen-shimmer" x="180" y="120" width="1500" height="600" fill="#c6ecff"/>
+        </g>
+        <g class="screen-halos"><ellipse cx="656" cy="230" rx="115" ry="80" fill="url(#screenGlow)"/><ellipse cx="1093" cy="230" rx="115" ry="80" fill="url(#screenGlow)"/></g>
+        <g class="steam" fill="none" stroke="#f5f3e8" stroke-width="2" stroke-linecap="round"><path d="M1561 349q-10-12 0-23t0-23"/><path d="M1570 348q11-10 0-22t0-22"/></g>
+      </svg>
+      <div class="room-shade" aria-hidden="true"></div>
+      <div class="people" id="people"></div>
+      <button class="hotspot coffee" data-zone="coffee" aria-label="Открыть зону кофе"><span class="zone-dot"></span><span>Кофе & идеи</span><span class="plus">+</span></button>
+      <button class="hotspot gear" data-zone="gear" aria-label="Открыть зону съёмок"><span class="zone-dot"></span><span>Зона съёмок</span><span class="plus">+</span></button>
+      <div class="scene-caption"><span class="small-dot"></span><span id="sceneCaption">Студия в своём ритме</span></div>
+      <button class="expand" id="fullscreen" aria-label="Открыть офис на весь экран" title="На весь экран">⛶</button>
+    </div>
+    <div class="under-scene"><span><span class="status-dot"></span><span id="connection">Сцена без подключения задач</span></span><span>Нажмите на персонажа, чтобы открыть задачи</span></div>
+  </section>
+
+  <footer class="controls">
+    <div class="control-title"><span class="eyebrow">АТМОСФЕРА</span><span id="timeHint">После 17:00 за окном темнеет</span></div>
+    <div class="segmented" role="group" aria-label="Освещение офиса">
+      <button data-mode="auto" aria-pressed="true">Авто</button><button data-mode="day" aria-pressed="false"><span aria-hidden="true">☀</span> День</button><button data-mode="evening" aria-pressed="false"><span aria-hidden="true">◒</span> Вечер</button><button data-mode="night" aria-pressed="false"><span aria-hidden="true">☾</span> Ночь</button>
+    </div>
+    <div class="view-controls"><button class="icon-control" id="teamToggle" aria-pressed="true">Команда <span id="teamCount">4 + ИИ</span></button><button class="icon-control" id="motionToggle" aria-pressed="true">Анимация <span id="motionState">вкл.</span></button></div>
+  </footer>
+  <p class="footnote">Рабочие места · кофе · контент · команда</p>
+</main>
+
+<aside class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="panelTitle" hidden>
+  <button class="panel-close" id="closePanel" aria-label="Закрыть">×</button>
+  <span class="eyebrow" id="panelEyebrow">КОМАНДА AXIUM</span><h2 id="panelTitle"></h2><p id="panelIntro"></p><div id="panelBody"></div>
+</aside>
+<div class="scrim" id="scrim" hidden></div>
+<div class="sr-only" id="announcement" aria-live="polite"></div>
+<script type="module" src="assets/office/studio.mjs"></script>
+</body>
+</html>
